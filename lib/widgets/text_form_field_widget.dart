@@ -1,13 +1,58 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
+import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TextFormFieldWidget extends StatelessWidget {
-  const TextFormFieldWidget({super.key});
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
+  final bool? obscureText;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final void Function()? onEditingComplete;
+  final Icon? prefixIcon;
+  final EdgeInsets? contentPadding;
+  final Function(String)? onChanged;
+  final double? radius;
+  final int? maxlines;
+  final Widget? suffixIcon;
+  final String hintText;
+
+  const TextFormFieldWidget({
+    super.key,
+    required this.controller,
+    this.validator,
+    this.obscureText,
+    this.keyboardType,
+    this.inputFormatters,
+    this.onEditingComplete,
+    this.prefixIcon,
+    this.contentPadding,
+    this.onChanged,
+    this.radius,
+    this.maxlines,
+    this.suffixIcon,
+    required this.hintText,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onEditingComplete: onEditingComplete,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      controller: controller,
+      obscureText: obscureText ?? false,
+      textInputAction: TextInputAction.next,
+      onChanged: onChanged,
+      maxLines: maxlines,
+      style: AppTextStyles.body2(fontWeight: FontWeight.w400),
       decoration: InputDecoration(
+        prefixIcon: prefixIcon,
+        isDense: true,
+        hintText: hintText,
+        hintStyle: AppTextStyles.body2(fontWeight: FontWeight.w400, color: Colors.grey.shade600),
+        suffixIcon: suffixIcon,
+        contentPadding: EdgeInsets.all(16),
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
