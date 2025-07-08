@@ -8,4 +8,5 @@ class AppColors {
   static const mainLightBlue = Color(0xff537FE7);
   static const mainWhite = Colors.white;
   static const mainBlack = Colors.black;
+  static const mainRed = Colors.red;
 }

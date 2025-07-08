@@ -28,7 +28,7 @@ class AppTextStyles {
   }) {
     return TextStyle(
       fontFamily: AssetsFonts.fontFamilyInter,
-      fontSize: fontSize ?? 30,
+      fontSize: fontSize ?? 32,
       fontWeight: fontWeight,
       height: height,
       color: color,

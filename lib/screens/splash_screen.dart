@@ -1,6 +1,6 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/constants/assets_images.dart';
-import 'package:absensi_ppkd/screens/main_screen.dart';
+import 'package:absensi_ppkd/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> changePage() async {
     Future.delayed(Duration(milliseconds: 2500), () async {
-      Navigator.pushReplacementNamed(context, MainScreen.id);
+      Navigator.pushReplacementNamed(context, LoginScreen.id);
     });
   }
 
@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(48),
-              child: Image.asset(AssetsImages.imagesLogoWithText),
+              child: Image.asset(AssetsImages.imagesLogoTextBottom),
             ),
           ],
         ),
