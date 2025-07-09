@@ -1,33 +1,35 @@
 import 'dart:async';
 
 import 'package:absensi_ppkd/constants/app_colors.dart';
+import 'package:absensi_ppkd/providers/navigation_provider.dart';
 import 'package:absensi_ppkd/screens/check_in_screen.dart';
 import 'package:absensi_ppkd/screens/dashboard_screen.dart';
 import 'package:absensi_ppkd/screens/history_screen.dart';
+import 'package:absensi_ppkd/screens/profile_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerStatefulWidget {
   static const String id = "/main";
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   double opacity = 0;
   Timer? _timer;
   List<Widget> screenList = [
     DashboardScreen(),
     HistoryScreen(),
     DashboardScreen(),
-    DashboardScreen(),
+    ProfileScreen(),
   ];
   static List<IconData> iconList = [Icons.home, Icons.list_alt, Icons.groups_2, Icons.person];
   static List<String> labelList = ["Home", "History", "Users", "Profile"];
-  int currentPage = 0;
 
   void _incrementValue() {
     _timer?.cancel();
@@ -60,12 +62,13 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final navigationState = ref.watch(navigationProvider);
     return Scaffold(
       bottomNavigationBar: AnimatedBottomNavigationBar.builder(
         itemCount: iconList.length,
         onTap: (value) {
           setState(() {
-            currentPage = value;
+            ref.read(navigationProvider.notifier).setPage(currentPage: value);
           });
         },
         height: 70,
@@ -93,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           );
         },
-        activeIndex: currentPage,
+        activeIndex: navigationState.currentPage,
         notchSmoothness: NotchSmoothness.defaultEdge,
         leftCornerRadius: 24,
         rightCornerRadius: 24,
@@ -130,7 +133,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: screenList[currentPage],
+      body: screenList[navigationState.currentPage],
     );
   }
 }

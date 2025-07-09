@@ -1,20 +1,23 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/constants/assets_images.dart';
+import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/widgets/check_in_card_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   static const String id = "/dsahboard";
   const DashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
+    final userState = ref.watch(userProvider);
     double currentHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SingleChildScrollView(
@@ -44,18 +47,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    "Muhammad Rio Akbar",
+                    userState.user!.name,
                     style: AppTextStyles.body2(
                       fontWeight: FontWeight.w500,
                       color: AppColors.mainWhite,
                     ),
                   ),
                   SizedBox(height: 4),
-                  Text(
-                    "123456789",
-                    style: AppTextStyles.body2(
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.mainWhite,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 44),
+                    child: Text(
+                      userState.user!.training!.title,
+                      style: AppTextStyles.body2(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.mainWhite,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   SizedBox(height: 16),

@@ -58,6 +58,7 @@ class UserApi {
       headers: {"Accept": "application/json", "Content-Type": "application/json"},
       body: jsonEncode(loginMap),
     );
+    print(response.body);
     if (response.statusCode == 200 || response.statusCode == 404 || response.statusCode == 401) {
       return ResponseModel.fromJson(
         json: jsonDecode(response.body),
