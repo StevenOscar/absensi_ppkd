@@ -34,7 +34,10 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(48),
-              child: Image.asset(AssetsImages.imagesLogoTextBottom),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(40),
+                child: Image.asset(AssetsImages.imagesLogoTextBottom),
+              ),
             ),
           ],
         ),

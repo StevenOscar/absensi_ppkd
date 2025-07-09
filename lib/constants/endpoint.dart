@@ -1,6 +1,6 @@
 class Endpoint {
   static String baseUrl = "https://appabsensi.mobileprojp.com";
-  static String baseUrlApi = "https://appabsensi.mobileprojp.com/api/";
+  static String baseUrlApi = "https://appabsensi.mobileprojp.com/api";
   static String register = "$baseUrlApi/register";
   static String login = "$baseUrlApi/login";
   static String absen = "$baseUrlApi/absen";

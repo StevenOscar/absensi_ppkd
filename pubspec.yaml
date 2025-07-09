@@ -39,6 +39,14 @@ dependencies:
   geocoding: ^4.0.0
   google_maps_flutter: ^2.12.3
   image_picker: ^1.1.2
+  http: ^1.4.0
+  intl: ^0.19.0
+  path_provider: ^2.1.5
+  shared_preferences: ^2.5.3
+  cached_network_image: ^3.4.1
+  flutter_riverpod: ^2.6.1
+  fluttertoast: ^8.2.12
+  dropdown_search: ^6.0.2
 
 dev_dependencies:
   flutter_test:

@@ -9,4 +9,5 @@ class AppColors {
   static const mainWhite = Colors.white;
   static const mainBlack = Colors.black;
   static const mainRed = Colors.red;
+  static const mainGreen = Colors.green;
 }

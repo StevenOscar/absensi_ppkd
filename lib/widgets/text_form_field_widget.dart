@@ -17,6 +17,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final int? maxlines;
   final Widget? suffixIcon;
   final String hintText;
+  final String? errorText;
 
   const TextFormFieldWidget({
     super.key,
@@ -33,6 +34,7 @@ class TextFormFieldWidget extends StatelessWidget {
     this.maxlines,
     this.suffixIcon,
     required this.hintText,
+    required this.errorText,
   });
 
   @override
@@ -48,6 +50,9 @@ class TextFormFieldWidget extends StatelessWidget {
       style: AppTextStyles.body2(fontWeight: FontWeight.w400),
       decoration: InputDecoration(
         prefixIcon: prefixIcon,
+        errorText: errorText,
+        errorStyle: AppTextStyles.body4(fontWeight: FontWeight.w500),
+        errorMaxLines: 2,
         isDense: true,
         hintText: hintText,
         hintStyle: AppTextStyles.body2(fontWeight: FontWeight.w400, color: Colors.grey.shade600),
