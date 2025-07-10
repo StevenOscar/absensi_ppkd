@@ -1,4 +1,5 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
+import 'package:absensi_ppkd/providers/location_provider.dart';
 import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/widgets/check_in_card_widget.dart';
@@ -17,6 +18,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userProvider);
+    final locationState = ref.watch(locationProvider);
     double currentHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SingleChildScrollView(
@@ -34,30 +36,22 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               child: Column(
                 children: [
                   SizedBox(height: currentHeight * 0.082),
-                  Container(
-                    height: 120,
-                    decoration: BoxDecoration(
-                      color:
-                          userState.user!.profilePhoto == null
-                              ? AppColors.mainGrey.withValues(alpha: 0.9)
-                              : null,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: ClipOval(
-                        child:
-                            userState.user!.profilePhoto != null
-                                ? Image.network(
-                                  "https://appabsensi.mobileprojp.com/public/${userState.user!.profilePhoto!}",
-                                  fit: BoxFit.cover,
-                                )
-                                : Icon(
-                                  Icons.camera_alt_outlined,
-                                  size: 70,
-                                  color: AppColors.mainWhite,
-                                ),
-                      ),
-                    ),
+                  CircleAvatar(
+                    radius: 75, // karena 150/2
+                    backgroundColor:
+                        userState.user!.profilePhoto == null
+                            ? AppColors.mainGrey.withValues(alpha: 0.9)
+                            : Colors.transparent,
+                    backgroundImage:
+                        userState.user!.profilePhoto != null
+                            ? NetworkImage(
+                              "https://appabsensi.mobileprojp.com/public/${userState.user!.profilePhoto!}",
+                            )
+                            : null,
+                    child:
+                        userState.user!.profilePhoto == null
+                            ? Icon(Icons.camera_alt_outlined, size: 70, color: AppColors.mainWhite)
+                            : null,
                   ),
                   SizedBox(height: 8),
                   Text(
@@ -112,7 +106,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  "250.43 m",
+                  locationState.distanceInMeter == null
+                      ? "- M"
+                      : "${(locationState.distanceInMeter)!.toStringAsFixed(3)} M",
                   style: AppTextStyles.heading4(
                     fontWeight: FontWeight.w800,
                     color: AppColors.mainBlack,

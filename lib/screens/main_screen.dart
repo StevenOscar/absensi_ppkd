@@ -1,15 +1,19 @@
 import 'dart:async';
 
 import 'package:absensi_ppkd/constants/app_colors.dart';
+import 'package:absensi_ppkd/helper/permission_helper.dart';
+import 'package:absensi_ppkd/providers/location_provider.dart';
 import 'package:absensi_ppkd/providers/navigation_provider.dart';
 import 'package:absensi_ppkd/screens/check_in/check_in_screen.dart';
 import 'package:absensi_ppkd/screens/dashboard_screen.dart';
 import 'package:absensi_ppkd/screens/history/history_screen.dart';
 import 'package:absensi_ppkd/screens/profile/profile_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
+import 'package:absensi_ppkd/utils/app_toast.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   static const String id = "/main";
@@ -28,22 +32,35 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     DashboardScreen(),
     ProfileScreen(),
   ];
+
+  final FToast fToast = FToast();
   static List<IconData> iconList = [Icons.home, Icons.list_alt, Icons.groups_2, Icons.person];
   static List<String> labelList = ["Home", "History", "Users", "Profile"];
 
+  @override
+  void initState() {
+    ref.read(locationProvider.notifier).startTrackingLocation();
+    fToast.init(context);
+    super.initState();
+  }
+
   void _incrementValue() {
     _timer?.cancel();
-    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-      setState(() {
-        if (opacity == 1) {
+    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) async {
+      if (opacity == 1) {
+        final permission = await PermissionHelper.locationPermission();
+        if (permission) {
           Navigator.pushNamed(context, CheckInScreen.id);
-          opacity = 0;
-        } else if (opacity < 1) {
-          opacity = (opacity + 0.1).clamp(0.0, 1.0);
         } else {
-          _timer?.cancel();
+          AppToast.showErrorToast(fToast, "Please Enable Location Permission");
         }
-      });
+        opacity = 0;
+      } else if (opacity < 1) {
+        opacity = (opacity + 0.1).clamp(0.0, 1.0);
+      } else {
+        _timer?.cancel();
+      }
+      setState(() {});
     });
   }
 

@@ -1,23 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefHelper{
-  static final String _loginKey = "login";
   static final String _tokenKey = "token";
-
-  static Future<void> setLogin(bool login) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool(_loginKey, login);
-  }
-
-  static Future<bool> getLogin() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_loginKey) ?? false;
-  }
-
-  static Future<void> deleteLogin() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove(_loginKey);
-  }
 
   static Future<void> setToken(String token) async {
     final prefs = await SharedPreferences.getInstance();

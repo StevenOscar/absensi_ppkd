@@ -1,22 +1,25 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
+import 'package:absensi_ppkd/providers/location_provider.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/widgets/check_in_card_widget.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class CheckInScreen extends StatefulWidget {
+class CheckInScreen extends ConsumerStatefulWidget {
   static const String id = "/check_in";
   const CheckInScreen({super.key});
 
   @override
-  State<CheckInScreen> createState() => _CheckInScreenState();
+  ConsumerState<CheckInScreen> createState() => _CheckInScreenState();
 }
 
-class _CheckInScreenState extends State<CheckInScreen> {
+class _CheckInScreenState extends ConsumerState<CheckInScreen> {
   @override
   Widget build(BuildContext context) {
     double currentHeight = MediaQuery.of(context).size.height;
+    final locationState = ref.watch(locationProvider);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70,
@@ -49,8 +52,27 @@ class _CheckInScreenState extends State<CheckInScreen> {
             pinned: true,
             toolbarHeight: currentHeight * 0.47,
             flexibleSpace: GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: locationState.currentPosition ?? LatLng(0, 0),
+                zoom: 10,
+              ),
+              onMapCreated: (controller) {
+                ref.read(locationProvider.notifier).setMapController(controller);
+                ref.read(locationProvider.notifier).startTrackingLocation();
+              },
+              markers: locationState.marker != null ? {locationState.marker!} : {},
+              myLocationButtonEnabled: true,
               myLocationEnabled: true,
-              initialCameraPosition: CameraPosition(target: LatLng(0.0008, 0.555), zoom: 2),
+              circles: {
+                Circle(
+                  circleId: CircleId("target_radius"),
+                  center: targetLatLng,
+                  radius: 100,
+                  fillColor: Colors.blue.withValues(alpha: 0.2),
+                  strokeColor: Colors.blue,
+                  strokeWidth: 2,
+                ),
+              },
             ),
           ),
           SliverFillRemaining(
@@ -90,7 +112,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          "Alamat : ",
+                          "Address : ",
                           style: AppTextStyles.body3(
                             fontWeight: FontWeight.w700,
                             color: AppColors.mainLightBlue,
@@ -100,23 +122,24 @@ class _CheckInScreenState extends State<CheckInScreen> {
                       Expanded(
                         flex: 8,
                         child: Text(
-                          "Jl. Pangeran Diponegoro No 5, Kec. Medan Petisah, Kota Medan, Sumatra Utara",
+                          locationState.currentAddress,
                           style: AppTextStyles.body3(
                             fontWeight: FontWeight.w500,
                             color: AppColors.mainBlack,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
                   ),
                   SizedBox(height: 20),
                   CheckInCardWidget(),
-                  Spacer(),
+                  SizedBox(height: 28),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButtonWidget(onPressed: () {}, text: "Check In"),
                   ),
-                  SizedBox(height: 20),
                 ],
               ),
             ),

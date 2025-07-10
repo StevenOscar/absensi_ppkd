@@ -157,32 +157,28 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       onTap: () {
                         pickImage();
                       },
-                      child: Container(
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color:
-                              selectedImage == null && currentImage == null
-                                  ? AppColors.mainGrey.withValues(alpha: 0.9)
-                                  : null,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: ClipOval(
-                            child:
-                                selectedImage != null
-                                    ? Image.file(selectedImage!, fit: BoxFit.cover)
-                                    : (currentImage != null
-                                        ? Image.network(
-                                          "https://appabsensi.mobileprojp.com/public/${currentImage!}",
-                                          fit: BoxFit.cover,
-                                        )
-                                        : Icon(
-                                          Icons.camera_alt_outlined,
-                                          size: 70,
-                                          color: AppColors.mainWhite,
-                                        )),
-                          ),
-                        ),
+                      child: CircleAvatar(
+                        radius: 75,
+                        backgroundColor:
+                            (selectedImage == null && currentImage == null)
+                                ? AppColors.mainGrey.withValues(alpha: 0.9)
+                                : Colors.transparent,
+                        backgroundImage:
+                            selectedImage != null
+                                ? FileImage(selectedImage!)
+                                : (currentImage != null
+                                    ? NetworkImage(
+                                      "https://appabsensi.mobileprojp.com/public/${currentImage!}",
+                                    )
+                                    : null),
+                        child:
+                            (selectedImage == null && currentImage == null)
+                                ? Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 70,
+                                  color: AppColors.mainWhite,
+                                )
+                                : null,
                       ),
                     ),
                     SizedBox(height: 40),

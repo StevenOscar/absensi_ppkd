@@ -1,75 +1,100 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-final navigationProvider = NotifierProvider<LocationProvider, NavigationState>(
+final locationProvider = NotifierProvider<LocationProvider, LocationState>(
   () => LocationProvider(),
 );
 
-class NavigationState {
+const targetLatLng = LatLng(
+  -6.210868134288406,
+  106.81294508218784,
+); //Pusat Pelatihan Kerja Daerah Jaarta Pusat
+
+class LocationState {
   final LatLng? currentPosition;
   final String currentAddress;
   final Marker? marker;
+  final double? distanceInMeter;
 
-  const NavigationState({
+  const LocationState({
     this.currentPosition,
-    this.currentAddress = "Alamat tidak ditemukan",
+    this.currentAddress = "Address Not Found",
     this.marker,
+    this.distanceInMeter,
   });
 
-  NavigationState copyWith({LatLng? currentPosition, String? currentAddress, Marker? marker}) {
-    return NavigationState(
+  LocationState copyWith({
+    LatLng? currentPosition,
+    String? currentAddress,
+    Marker? marker,
+    double? distanceInMeter,
+  }) {
+    return LocationState(
       currentPosition: currentPosition ?? this.currentPosition,
       currentAddress: currentAddress ?? this.currentAddress,
       marker: marker ?? this.marker,
+      distanceInMeter: distanceInMeter ?? this.distanceInMeter,
     );
   }
 }
 
-class LocationProvider extends Notifier<NavigationState> {
-  GoogleMapController? mapController;
+class LocationProvider extends Notifier<LocationState> {
+  GoogleMapController? _mapController;
+  StreamSubscription<Position>? _positionStream;
 
   @override
-  NavigationState build() => const NavigationState();
-
-  void setMapController(GoogleMapController controller) {
-    mapController = controller;
+  LocationState build() {
+    ref.onDispose(() {
+      _mapController?.dispose();
+    });
+    return const LocationState();
   }
 
-  Future<void> getCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      return;
-    }
+  void setMapController(GoogleMapController controller) {
+    _mapController = controller;
+  }
 
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
-      permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
-        return;
-      }
-    }
+  void startTrackingLocation() async {
+    _positionStream?.cancel();
+    _positionStream = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 10),
+    ).listen((position) async {
+      final currentLatLng = LatLng(position.latitude, position.longitude);
+      final placemarks = await placemarkFromCoordinates(
+        currentLatLng.latitude,
+        currentLatLng.longitude,
+      );
+      final place = placemarks.first;
+      final address = "${place.name}, ${place.street}, ${place.locality}, ${place.country}";
 
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    final LatLng latLng = LatLng(position.latitude, position.longitude);
+      final targetMarker = Marker(
+        markerId: const MarkerId("target_location"),
+        position: targetLatLng,
+        infoWindow: const InfoWindow(title: "Target"),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      );
 
-    List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+      final distanceInMeters = Geolocator.distanceBetween(
+        currentLatLng.latitude,
+        currentLatLng.longitude,
+        targetLatLng.latitude,
+        targetLatLng.longitude,
+      );
 
-    final Placemark place = placemarks.first;
-    final String address = "${place.name}, ${place.street}, ${place.locality}, ${place.country}";
+      state = state.copyWith(
+        currentPosition: currentLatLng,
+        marker: targetMarker,
+        distanceInMeter: distanceInMeters,
+        currentAddress: address,
+      );
 
-    final marker = Marker(
-      markerId: const MarkerId("lokasi_saya"),
-      position: latLng,
-      infoWindow: InfoWindow(title: "Lokasi Anda", snippet: "${place.street}, ${place.locality}"),
-    );
-
-    state = state.copyWith(currentPosition: latLng, currentAddress: address, marker: marker);
-
-    mapController?.animateCamera(
-      CameraUpdate.newCameraPosition(CameraPosition(target: latLng, zoom: 16)),
-    );
+      _mapController?.animateCamera(
+        CameraUpdate.newCameraPosition(CameraPosition(target: currentLatLng, zoom: 17)),
+      );
+    });
   }
 }
