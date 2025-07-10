@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/providers/navigation_provider.dart';
-import 'package:absensi_ppkd/screens/check_in_screen.dart';
+import 'package:absensi_ppkd/screens/check_in/check_in_screen.dart';
 import 'package:absensi_ppkd/screens/dashboard_screen.dart';
-import 'package:absensi_ppkd/screens/history_screen.dart';
-import 'package:absensi_ppkd/screens/profile_screen.dart';
+import 'package:absensi_ppkd/screens/history/history_screen.dart';
+import 'package:absensi_ppkd/screens/profile/profile_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +116,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             Container(
               width: 70,
               height: 70,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.mainLightBlue),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.mainGrey),
               child: Icon(Icons.fingerprint, color: AppColors.mainWhite, size: 48),
             ),
             AnimatedOpacity(
@@ -125,7 +125,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               child: Container(
                 width: 70,
                 height: 70,
-                decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.mainYellow),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.mainLightBlue),
                 child: Icon(Icons.fingerprint, color: AppColors.mainWhite, size: 48),
               ),
             ),

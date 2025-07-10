@@ -7,7 +7,7 @@ import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/models/batch_model.dart';
 import 'package:absensi_ppkd/models/response_model.dart';
 import 'package:absensi_ppkd/models/training_model.dart';
-import 'package:absensi_ppkd/screens/login_screen.dart';
+import 'package:absensi_ppkd/screens/auth/login_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
 import 'package:absensi_ppkd/widgets/dropdown_form_field_widget.dart';
@@ -66,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void checkValidity() {
+  void _checkValidity() {
     setState(() {
       isFormValid =
           isUsernameValid &&
@@ -176,7 +176,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   pickImage();
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor: AppColors.mainGrey.withValues(alpha: 0.9),
+                                  backgroundColor:
+                                      selectedImage == null
+                                          ? AppColors.mainGrey.withValues(alpha: 0.9)
+                                          : null,
                                   radius: 80,
                                   child:
                                       selectedImage == null
@@ -185,7 +188,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             size: 70,
                                             color: AppColors.mainWhite,
                                           )
-                                          : Image.file(selectedImage!),
+                                          : ClipOval(child: Image.file(selectedImage!)),
                                 ),
                               ),
                             ),
@@ -206,7 +209,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     isUsernameValid = true;
                                     usernameError = null;
                                   }
-                                  checkValidity();
+                                  _checkValidity();
                                 });
                               },
                               prefixIcon: Icon(Icons.person_outline, size: 24),
@@ -230,7 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     isEmailValid = true;
                                     emailError = null;
                                   }
-                                  checkValidity();
+                                  _checkValidity();
                                 });
                               },
                               prefixIcon: Icon(Icons.email_outlined, size: 24),
@@ -261,7 +264,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     isPasswordValid = true;
                                     passwordError = null;
                                   }
-                                  checkValidity();
+                                  _checkValidity();
                                 });
                               },
                               maxlines: 1,
@@ -356,7 +359,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     onChanged: (value) {
                                       setState(() {
                                         selectedBatch = value!;
-                                        checkValidity();
+                                        _checkValidity();
                                       });
                                     },
                                   );
@@ -411,7 +414,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     onChanged: (value) {
                                       setState(() {
                                         selectedTraining = value!;
-                                        checkValidity();
+                                        _checkValidity();
                                       });
                                     },
                                   );

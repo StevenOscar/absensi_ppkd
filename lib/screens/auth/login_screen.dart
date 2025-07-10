@@ -5,7 +5,7 @@ import 'package:absensi_ppkd/helper/shared_pref_helper.dart';
 import 'package:absensi_ppkd/models/user_model.dart';
 import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/screens/main_screen.dart';
-import 'package:absensi_ppkd/screens/register_screen.dart';
+import 'package:absensi_ppkd/screens/auth/register_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';

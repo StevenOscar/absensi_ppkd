@@ -1,5 +1,4 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
-import 'package:absensi_ppkd/constants/assets_images.dart';
 import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/widgets/check_in_card_widget.dart';
@@ -34,8 +33,32 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
               child: Column(
                 children: [
-                  SizedBox(height: currentHeight * 0.085),
-                  CircleAvatar(radius: 50, backgroundImage: AssetImage(AssetsImages.imagesStudent)),
+                  SizedBox(height: currentHeight * 0.082),
+                  Container(
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color:
+                          userState.user!.profilePhoto == null
+                              ? AppColors.mainGrey.withValues(alpha: 0.9)
+                              : null,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: ClipOval(
+                        child:
+                            userState.user!.profilePhoto != null
+                                ? Image.network(
+                                  "https://appabsensi.mobileprojp.com/public/${userState.user!.profilePhoto!}",
+                                  fit: BoxFit.cover,
+                                )
+                                : Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 70,
+                                  color: AppColors.mainWhite,
+                                ),
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 8),
                   Text(
                     "MORNING",
@@ -46,11 +69,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text(
-                    userState.user!.name,
-                    style: AppTextStyles.body2(
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.mainWhite,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      userState.user!.name,
+                      style: AppTextStyles.body2(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.mainWhite,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   SizedBox(height: 4),
@@ -63,6 +92,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         color: AppColors.mainWhite,
                       ),
                       textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   SizedBox(height: 16),

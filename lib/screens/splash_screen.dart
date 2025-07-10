@@ -1,6 +1,6 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/constants/assets_images.dart';
-import 'package:absensi_ppkd/screens/login_screen.dart';
+import 'package:absensi_ppkd/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

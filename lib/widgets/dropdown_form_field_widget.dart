@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 class DropdownSearchWidget<T> extends StatelessWidget {
   final T? value;
   final String title;
+  final bool? enabled;
   final Icon prefixIcon;
   final List<T> dropdownItemList;
   final void Function(T?)? onChanged;
@@ -17,13 +18,14 @@ class DropdownSearchWidget<T> extends StatelessWidget {
     required this.onChanged,
     this.validator,
     required this.title,
-    required this.prefixIcon,
+    required this.prefixIcon, this.enabled,
   });
 
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<T>(
       selectedItem: value,
+      enabled: enabled ?? true,
       popupProps: PopupProps.bottomSheet(
         itemBuilder: (context, item, isDisabled, isSelected) {
           return Padding(

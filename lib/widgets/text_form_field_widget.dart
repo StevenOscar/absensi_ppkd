@@ -7,6 +7,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final bool? obscureText;
+  final bool? enabled;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final void Function()? onEditingComplete;
@@ -34,7 +35,7 @@ class TextFormFieldWidget extends StatelessWidget {
     this.maxlines,
     this.suffixIcon,
     required this.hintText,
-    required this.errorText,
+    required this.errorText,  this.enabled,
   });
 
   @override
@@ -45,6 +46,7 @@ class TextFormFieldWidget extends StatelessWidget {
       controller: controller,
       obscureText: obscureText ?? false,
       textInputAction: TextInputAction.next,
+      enabled: enabled ?? true,
       onChanged: onChanged,
       maxLines: maxlines,
       style: AppTextStyles.body2(fontWeight: FontWeight.w400),

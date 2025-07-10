@@ -27,9 +27,9 @@ class User {
   int? batchId;
   int? trainingId;
   String? jenisKelamin;
-  dynamic profilePhoto;
-  DateTime updatedAt;
-  DateTime createdAt;
+  String? profilePhoto;
+  DateTime? updatedAt;
+  DateTime? createdAt;
   int id;
   Batch? batch;
   Training? training;
@@ -57,9 +57,9 @@ class User {
             ? json['training_id']
             : int.tryParse(json['training_id'].toString()),
     jenisKelamin: json['jenis_kelamin'] == null ? null : json["jenis_kelamin"],
-    profilePhoto: json['profile_photo'] == null ? null : json["profile_photo"],
-    updatedAt: DateTime.parse(json["updated_at"]),
-    createdAt: DateTime.parse(json["created_at"]),
+    profilePhoto: json['profile_photo'] == null ? null : json["profile_photo"]?.toString(),
+    updatedAt: json["updated_at"] != null ? DateTime.tryParse(json["updated_at"]) : null,
+    createdAt: json["created_at"] != null ? DateTime.tryParse(json["created_at"]) : null,
     id: json["id"],
     batch: json['batch'] == null ? null : Batch.fromJson(json["batch"]),
     training: json['training'] == null ? null : Training.fromJson(json["training"]),
@@ -72,10 +72,38 @@ class User {
     "training_id": trainingId,
     "jenis_kelamin": jenisKelamin,
     "profile_photo": profilePhoto,
-    "updated_at": updatedAt.toIso8601String(),
-    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "created_at": createdAt?.toIso8601String(),
     "id": id,
     "batch": batch?.toJson(),
     "training": training?.toJson(),
   };
+
+  User copyWith({
+    String? name,
+    String? email,
+    int? batchId,
+    int? trainingId,
+    String? jenisKelamin,
+    String? profilePhoto,
+    DateTime? updatedAt,
+    DateTime? createdAt,
+    int? id,
+    Batch? batch,
+    Training? training,
+  }) {
+    return User(
+      name: name ?? this.name,
+      email: email ?? this.email,
+      batchId: batchId ?? this.batchId,
+      trainingId: trainingId ?? this.trainingId,
+      jenisKelamin: jenisKelamin ?? this.jenisKelamin,
+      profilePhoto: profilePhoto ?? this.profilePhoto,
+      updatedAt: updatedAt ?? this.updatedAt,
+      createdAt: createdAt ?? this.createdAt,
+      id: id ?? this.id,
+      batch: batch ?? this.batch,
+      training: training ?? this.training,
+    );
+  }
 }
