@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/helper/permission_helper.dart';
-import 'package:absensi_ppkd/providers/location_provider.dart';
 import 'package:absensi_ppkd/providers/navigation_provider.dart';
 import 'package:absensi_ppkd/screens/check_in/check_in_screen.dart';
 import 'package:absensi_ppkd/screens/dashboard_screen.dart';
@@ -39,7 +38,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   void initState() {
-    ref.read(locationProvider.notifier).startTrackingLocation();
     fToast.init(context);
     super.initState();
   }

@@ -1,34 +1,33 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HistoryScreen extends StatefulWidget {
+class HistoryScreen extends ConsumerStatefulWidget {
   const HistoryScreen({super.key});
 
   @override
-  State<HistoryScreen> createState() => _HistoryScreenState();
+  ConsumerState<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen> {
+class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 70,
+        elevation: 4,
         backgroundColor: AppColors.mainGrey,
-        leading: Icon(Icons.arrow_back, color: AppColors.mainWhite),
-        actionsPadding: EdgeInsets.only(right: 12),
-        actions: [
-          CircleAvatar(),
-          SizedBox(width: 8),
-          Icon(Icons.settings_outlined, color: AppColors.mainWhite, size: 30),
-          SizedBox(width: 4),
-          Icon(Icons.notifications, color: AppColors.mainWhite, size: 30),
-        ],
-        title: Text(
-          "Attendance History",
-          style: AppTextStyles.heading4(fontWeight: FontWeight.w700, color: AppColors.mainWhite),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 20, bottom: 8),
+          child: Text(
+            "Attendance History",
+            style: AppTextStyles.heading3(fontWeight: FontWeight.w700, color: AppColors.mainWhite),
+          ),
         ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.elliptical(60, 20)),
+        ),
+        toolbarHeight: 70,
       ),
       body: SingleChildScrollView(
         child: Column(

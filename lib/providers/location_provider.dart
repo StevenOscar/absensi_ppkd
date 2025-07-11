@@ -97,4 +97,9 @@ class LocationProvider extends Notifier<LocationState> {
       );
     });
   }
+
+  void stopTrackingLocation() {
+    _positionStream?.cancel();
+    _positionStream = null;
+  }
 }

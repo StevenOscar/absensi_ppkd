@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "5966186511",
+    "project_id": "ppkd-mp2",
+    "storage_bucket": "ppkd-mp2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5966186511:android:61b1eb3317ed0d32923b7a",
+        "android_client_info": {
+          "package_name": "com.absen.ppkd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiQVd-1DcCyOID5HMwKkHSrUE-0kTyxRY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5966186511:android:f682d654019ffc85923b7a",
+        "android_client_info": {
+          "package_name": "com.my.attendify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiQVd-1DcCyOID5HMwKkHSrUE-0kTyxRY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5966186511:android:3124a8eebb581f42923b7a",
+        "android_client_info": {
+          "package_name": "com.ppkd.absen_cuy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiQVd-1DcCyOID5HMwKkHSrUE-0kTyxRY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

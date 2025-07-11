@@ -30,8 +30,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   String? usernameError;
   String? emailError;
   final FToast fToast = FToast();
-  final ImagePicker picker = ImagePicker();
   String genderValue = "L";
+  final ImagePicker picker = ImagePicker();
   File? selectedImage;
   String? currentImage;
   String? selectedBatch;
@@ -61,6 +61,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     if (updateProfile) {
       AppToast.showSuccessToast(fToast, "Update Profile Success");
       await ref.read(userProvider.notifier).getUserProfile(fToast: fToast);
+      Navigator.pop(context);
       setState(() {
         _isLoading = false;
       });

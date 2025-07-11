@@ -76,7 +76,7 @@ class CheckInCardWidget extends StatelessWidget {
                 SizedBox(width: 16),
                 Container(
                   width: 2,
-                  height: 40, // or whatever height you want
+                  height: 40,
                   color: AppColors.mainWhite,
                 ),
                 SizedBox(width: 16),
