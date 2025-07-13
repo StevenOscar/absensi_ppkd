@@ -61,26 +61,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ? Icon(Icons.camera_alt_outlined, size: 70, color: AppColors.mainWhite)
                           : null,
                 ),
-                // Container(
-                //   height: 140,
-                //   width: 140,
-                //   clipBehavior: Clip.antiAlias,
-                //   alignment: Alignment.center,
-                //   decoration: BoxDecoration(
-                //     color:
-                //         userState.user!.profilePhoto == null
-                //             ? AppColors.mainGrey.withValues(alpha: 0.9)
-                //             : null,
-                //     shape: BoxShape.circle,
-                //   ),
-                //   child:
-                //       userState.user!.profilePhoto != null
-                //           ? Image.network(
-                //             "https://appabsensi.mobileprojp.com/public/${userState.user!.profilePhoto!}",
-                //             fit: BoxFit.cover,
-                //           )
-                //           : Icon(Icons.camera_alt_outlined, size: 70, color: AppColors.mainWhite),
-                // ),
                 SizedBox(height: 12),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),

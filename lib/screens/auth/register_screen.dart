@@ -84,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try {
       final batchId = batchList.firstWhere((element) => element.batchKe == selectedBatch).id;
       final trainingId = trainingList.firstWhere((element) => element.title == selectedTraining).id;
-      final res = await UserApi.createUser(
+      final res = await UserApi.postRegisterUser(
         username: usernameController.text,
         password: passwordController.text,
         email: emailController.text,
@@ -175,20 +175,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 onTap: () {
                                   pickImage();
                                 },
-                                child: CircleAvatar(
-                                  backgroundColor:
-                                      selectedImage == null
-                                          ? AppColors.mainGrey.withValues(alpha: 0.9)
-                                          : null,
-                                  radius: 80,
-                                  child:
-                                      selectedImage == null
-                                          ? Icon(
-                                            Icons.camera_alt_outlined,
-                                            size: 70,
-                                            color: AppColors.mainWhite,
-                                          )
-                                          : ClipOval(child: Image.file(selectedImage!)),
+                                child: SizedBox(
+                                  width: 160,
+                                  height: 160,
+                                  child: ClipOval(
+                                    child:
+                                        selectedImage != null
+                                            ? Image.file(selectedImage!, fit: BoxFit.cover)
+                                            : Container(
+                                              color: AppColors.mainGrey.withValues(alpha: 0.9),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.camera_alt_outlined,
+                                                  size: 70,
+                                                  color: AppColors.mainWhite,
+                                                ),
+                                              ),
+                                            ),
+                                  ),
                                 ),
                               ),
                             ),

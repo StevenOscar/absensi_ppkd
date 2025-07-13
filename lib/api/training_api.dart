@@ -18,7 +18,7 @@ class TrainingApi {
         fromJsonT: (x) => Batch.fromJson(x),
       );
     } else {
-      throw Exception("Error Fetch Batches");
+      throw Exception("Error Fetch Batches: ${response.statusCode}");
     }
   }
 
@@ -33,7 +33,7 @@ class TrainingApi {
         fromJsonT: (x) => Training.fromJson(x),
       );
     } else {
-      throw Exception("Error Fetch Trainings");
+      throw Exception("Error Fetch Trainings:  ${response.statusCode}");
     }
   }
 }

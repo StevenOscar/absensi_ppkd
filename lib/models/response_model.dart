@@ -19,6 +19,7 @@ class ResponseModel<T> {
     required Map<String, dynamic> json,
     T Function(Map<String, dynamic>)? fromJsonT,
   }) {
+    print(json["data"]);
     return ResponseModel(
       message: json["message"],
       errors: json["errors"] == null ? null : Errors.fromJson(json["errors"]),

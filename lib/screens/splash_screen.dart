@@ -1,26 +1,39 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/constants/assets_images.dart';
+import 'package:absensi_ppkd/helper/shared_pref_helper.dart';
+import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/screens/auth/login_screen.dart';
+import 'package:absensi_ppkd/screens/main_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   static String id = "/";
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> {
+  final fToast = FToast();
   @override
   void initState() {
+    fToast.init(context);
     super.initState();
-    changePage();
+    goToPage();
   }
 
-  Future<void> changePage() async {
-    Future.delayed(Duration(milliseconds: 2500), () async {
-      Navigator.pushReplacementNamed(context, LoginScreen.id);
+  Future<void> goToPage() async {
+    Future.delayed(Duration(milliseconds: 2000), () async {
+      final token = await SharedPrefHelper.getToken();
+      if (token.isEmpty) {
+        Navigator.pushReplacementNamed(context, LoginScreen.id);
+      } else {
+        await ref.read(userProvider.notifier).getUserProfile(fToast: fToast);
+        Navigator.pushReplacementNamed(context, MainScreen.id);
+      }
     });
   }
 

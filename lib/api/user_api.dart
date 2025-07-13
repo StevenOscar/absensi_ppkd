@@ -7,7 +7,7 @@ import 'package:absensi_ppkd/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class UserApi {
-  static Future<ResponseModel> createUser({
+  static Future<ResponseModel> postRegisterUser({
     required String username,
     required String password,
     required String email,
@@ -34,22 +34,16 @@ class UserApi {
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       print(response.body);
-      print(
-        ResponseModel.fromJson(
-          json: jsonDecode(response.body),
-          fromJsonT: (x) => UserModel.fromJson(x),
-        ),
-      );
       return ResponseModel.fromJson(
         json: jsonDecode(response.body),
         fromJsonT: (x) => UserModel.fromJson(x),
       );
     } else {
-      throw Exception("Register Failed");
+      throw Exception("Register Failed:  ${response.statusCode}");
     }
   }
 
-  static Future<ResponseModel<UserModel>> loginUser({
+  static Future<ResponseModel<UserModel>> postLoginUser({
     required String email,
     required String password,
   }) async {
@@ -72,6 +66,9 @@ class UserApi {
 
   static Future<ResponseModel<User>> getProfile() async {
     final token = await SharedPrefHelper.getToken();
+    if (token.isEmpty) {
+      throw "Token not found, Please Re-login";
+    }
     final response = await http.get(
       Uri.parse(Endpoint.profile),
       headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
@@ -89,6 +86,9 @@ class UserApi {
 
   static Future<ResponseModel<User>> editProfileData({required String username}) async {
     final token = await SharedPrefHelper.getToken();
+    if (token.isEmpty) {
+      throw "Token not found, Please Re-login";
+    }
     final response = await http.put(
       Uri.parse(Endpoint.profile),
       headers: {
@@ -111,6 +111,9 @@ class UserApi {
 
   static Future<ResponseModel<bool>> editProfilePicture({required String imageBase64}) async {
     final token = await SharedPrefHelper.getToken();
+    if (token.isEmpty) {
+      throw "Token not found, Please Re-login";
+    }
     final response = await http.put(
       Uri.parse("${Endpoint.profile}/photo"),
       headers: {

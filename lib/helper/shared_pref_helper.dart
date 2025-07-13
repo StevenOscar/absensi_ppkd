@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SharedPrefHelper{
+class SharedPrefHelper {
   static final String _tokenKey = "token";
 
   static Future<void> setToken(String token) async {

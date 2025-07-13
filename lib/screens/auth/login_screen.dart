@@ -3,9 +3,10 @@ import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/constants/assets_images.dart';
 import 'package:absensi_ppkd/helper/shared_pref_helper.dart';
 import 'package:absensi_ppkd/models/user_model.dart';
+import 'package:absensi_ppkd/providers/navigation_provider.dart';
 import 'package:absensi_ppkd/providers/user_provider.dart';
-import 'package:absensi_ppkd/screens/main_screen.dart';
 import 'package:absensi_ppkd/screens/auth/register_screen.dart';
+import 'package:absensi_ppkd/screens/main_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
@@ -59,8 +60,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _isLoading = true;
     });
     try {
-      final userState = ref.read(userProvider.notifier);
-      final res = await UserApi.loginUser(
+      final res = await UserApi.postLoginUser(
         email: emailController.text,
         password: passwordController.text,
       );
@@ -69,20 +69,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         AppToast.showErrorListToast(fToast, errorList);
       } else if (res.data != null) {
         await SharedPrefHelper.setToken(res.data!.token);
-        await userState.setUser(
-          user: User(
-            name: res.data!.user.name,
-            email: res.data!.user.email,
-            jenisKelamin: res.data!.user.jenisKelamin,
-            profilePhoto: res.data!.user.profilePhoto,
-            updatedAt: res.data!.user.updatedAt,
-            createdAt: res.data!.user.createdAt,
-            id: res.data!.user.id,
-            batch: res.data!.user.batch,
-            training: res.data!.user.training,
-          ),
-        );
+        await ref
+            .read(userProvider.notifier)
+            .setUser(
+              user: User(
+                name: res.data!.user.name,
+                email: res.data!.user.email,
+                jenisKelamin: res.data!.user.jenisKelamin,
+                profilePhoto: res.data!.user.profilePhoto,
+                updatedAt: res.data!.user.updatedAt,
+                createdAt: res.data!.user.createdAt,
+                id: res.data!.user.id,
+                batch: res.data!.user.batch,
+                training: res.data!.user.training,
+              ),
+            );
         AppToast.showSuccessToast(fToast, res.message);
+        ref.read(navigationProvider.notifier).setPage(currentPage: 0);
         Navigator.pushNamedAndRemoveUntil(context, MainScreen.id, (route) => false);
       } else {
         AppToast.showErrorToast(fToast, res.message);

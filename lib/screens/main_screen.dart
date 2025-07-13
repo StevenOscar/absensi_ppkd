@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/helper/permission_helper.dart';
 import 'package:absensi_ppkd/providers/navigation_provider.dart';
-import 'package:absensi_ppkd/screens/check_in/check_in_screen.dart';
+import 'package:absensi_ppkd/screens/check_in_out/check_in_out_screen.dart';
 import 'package:absensi_ppkd/screens/dashboard_screen.dart';
 import 'package:absensi_ppkd/screens/history/history_screen.dart';
+import 'package:absensi_ppkd/screens/leave_permission/leave_permission.dart';
 import 'package:absensi_ppkd/screens/profile/profile_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
@@ -27,14 +28,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Timer? _timer;
   List<Widget> screenList = [
     DashboardScreen(),
+    LeavePermissionScreen(),
     HistoryScreen(),
-    DashboardScreen(),
     ProfileScreen(),
   ];
 
   final FToast fToast = FToast();
-  static List<IconData> iconList = [Icons.home, Icons.list_alt, Icons.groups_2, Icons.person];
-  static List<String> labelList = ["Home", "History", "Users", "Profile"];
+  static List<IconData> iconList = [
+    Icons.home,
+    Icons.work_off_outlined,
+    Icons.list_alt,
+    Icons.person,
+  ];
+  static List<String> labelList = ["Home", "Leave", "History", "Profile"];
 
   @override
   void initState() {
@@ -48,13 +54,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       if (opacity == 1) {
         final permission = await PermissionHelper.locationPermission();
         if (permission) {
-          Navigator.pushNamed(context, CheckInScreen.id);
+          Navigator.pushNamed(context, CheckInOutScreen.id);
         } else {
           AppToast.showErrorToast(fToast, "Please Enable Location Permission");
         }
         opacity = 0;
       } else if (opacity < 1) {
-        opacity = (opacity + 0.1).clamp(0.0, 1.0);
+        opacity = (opacity + 0.2).clamp(0.0, 1.0);
       } else {
         _timer?.cancel();
       }
@@ -67,7 +73,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
       setState(() {
         if (opacity > 0.0) {
-          opacity = (opacity - 0.2).clamp(0.0, 1.0);
+          opacity = (opacity - 0.25).clamp(0.0, 1.0);
         } else {
           _timer?.cancel();
         }

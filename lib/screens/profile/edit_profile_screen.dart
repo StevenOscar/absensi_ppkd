@@ -7,6 +7,7 @@ import 'package:absensi_ppkd/utils/app_toast.dart';
 import 'package:absensi_ppkd/widgets/dropdown_form_field_widget.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:absensi_ppkd/widgets/text_form_field_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -158,28 +159,50 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       onTap: () {
                         pickImage();
                       },
-                      child: CircleAvatar(
-                        radius: 75,
-                        backgroundColor:
-                            (selectedImage == null && currentImage == null)
-                                ? AppColors.mainGrey.withValues(alpha: 0.9)
-                                : Colors.transparent,
-                        backgroundImage:
-                            selectedImage != null
-                                ? FileImage(selectedImage!)
-                                : (currentImage != null
-                                    ? NetworkImage(
-                                      "https://appabsensi.mobileprojp.com/public/${currentImage!}",
-                                    )
-                                    : null),
-                        child:
-                            (selectedImage == null && currentImage == null)
-                                ? Icon(
-                                  Icons.camera_alt_outlined,
-                                  size: 70,
-                                  color: AppColors.mainWhite,
-                                )
-                                : null,
+                      child: SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: ClipOval(
+                          child:
+                              selectedImage != null
+                                  ? Image.file(selectedImage!, fit: BoxFit.cover)
+                                  : (currentImage != null
+                                      ? CachedNetworkImage(
+                                        imageUrl:
+                                            "https://appabsensi.mobileprojp.com/public/$currentImage",
+                                        fit: BoxFit.cover,
+                                        placeholder:
+                                            (context, url) => Container(
+                                              color: AppColors.mainGrey.withValues(alpha: 0.3),
+                                              child: Center(
+                                                child: CircularProgressIndicator(
+                                                  color: AppColors.mainWhite,
+                                                ),
+                                              ),
+                                            ),
+                                        errorWidget:
+                                            (context, url, error) => Container(
+                                              color: AppColors.mainGrey.withValues(alpha: 0.3),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.no_photography_outlined,
+                                                  size: 70,
+                                                  color: AppColors.mainWhite,
+                                                ),
+                                              ),
+                                            ),
+                                      )
+                                      : Container(
+                                        color: AppColors.mainGrey.withValues(alpha: 0.9),
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.camera_alt_outlined,
+                                            size: 70,
+                                            color: AppColors.mainWhite,
+                                          ),
+                                        ),
+                                      )),
+                        ),
                       ),
                     ),
                     SizedBox(height: 40),
