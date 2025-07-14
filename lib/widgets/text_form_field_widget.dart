@@ -16,6 +16,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final Function(String)? onChanged;
   final double? radius;
   final int? maxlines;
+  final bool? filled;
   final Widget? suffixIcon;
   final String hintText;
   final String? errorText;
@@ -34,8 +35,10 @@ class TextFormFieldWidget extends StatelessWidget {
     this.radius,
     this.maxlines,
     this.suffixIcon,
+    this.filled,
     required this.hintText,
-    required this.errorText,  this.enabled,
+    required this.errorText,
+    this.enabled,
   });
 
   @override
@@ -60,7 +63,7 @@ class TextFormFieldWidget extends StatelessWidget {
         hintStyle: AppTextStyles.body2(fontWeight: FontWeight.w400, color: Colors.grey.shade600),
         suffixIcon: suffixIcon,
         contentPadding: EdgeInsets.all(16),
-        filled: true,
+        filled: filled ?? true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide.none,

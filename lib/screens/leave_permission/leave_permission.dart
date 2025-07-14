@@ -44,7 +44,8 @@ class _LeavePermissionScreenState extends ConsumerState<LeavePermissionScreen> {
     if (leavePermission) {
       AppToast.showSuccessToast(fToast, "Leave Request Submitted!");
     }
-
+    _selectedDate = null;
+    reasonController.clear();
     await ref.read(attendanceProvider.notifier).fetchTodayAttendance(fToast: fToast);
     await ref.read(attendanceProvider.notifier).fetchAttendanceHistory(fToast: fToast);
     await ref.read(attendanceProvider.notifier).fetchAttendanceStats(fToast: fToast);

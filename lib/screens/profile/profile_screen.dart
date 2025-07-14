@@ -1,8 +1,8 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/screens/auth/login_screen.dart';
-import 'package:absensi_ppkd/screens/profile/change_password_screen.dart';
 import 'package:absensi_ppkd/screens/profile/edit_profile_screen.dart';
+import 'package:absensi_ppkd/screens/profile/request_otp_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +139,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.pushNamed(context, ChangePasswordScreen.id);
+                    Navigator.pushNamed(context, RequestOtpScreen.id);
                   },
                 ),
                 buildListTile(

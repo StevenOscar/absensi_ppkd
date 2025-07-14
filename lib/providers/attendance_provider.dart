@@ -230,7 +230,7 @@ class AttendanceProvider extends Notifier<AttendanceState> {
             t.attendanceDate.day,
           );
           final isInDateRange =
-              tDate.isAfter((startDate ?? DateTime(1000)).subtract(Duration(days: 1))) &&
+              tDate.isAfter((startDate ?? DateTime(2000)).subtract(Duration(days: 1))) &&
               tDate.isBefore((endDate ?? DateTime(3000)).add(Duration(days: 1)));
           if (status != null) {
             if (status == "no checkout") {

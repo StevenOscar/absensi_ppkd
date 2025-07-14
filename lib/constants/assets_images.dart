@@ -3,4 +3,5 @@ class AssetsImages {
   static const imagesLogoTextBottom = "assets/images/logo_text_bottom.png";
   static const imagesStudent = "assets/images/student.png";
   static const imagesResetPassword = "assets/images/reset_password.png";
+  static const imagesOtp = "assets/images/otp.png";
 }

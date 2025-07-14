@@ -146,4 +146,47 @@ class UserApi {
       throw Exception("Error Profile Picture Failed:  $e");
     }
   }
+
+  static Future<ResponseModel<bool>> postRequestOtp({required String email}) async {
+    try {
+      final response = await http.post(
+        Uri.parse(Endpoint.forgotPassword),
+        headers: {"Accept": "application/json", "Content-Type": "application/json"},
+        body: jsonEncode({"email": email}),
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        return ResponseModel<bool>(message: "Success", data: true);
+      } else {
+        throw Exception("Request OTP Failed: ${response.statusCode}");
+      }
+    } on SocketException catch (e) {
+      throw Exception("Error Request OTP Failed:  $e");
+    }
+  }
+
+  static Future<ResponseModel<bool>> postResetPassword({
+    required String email,
+    required String password,
+    required String otp,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse(Endpoint.resetPassword),
+        headers: {"Accept": "application/json", "Content-Type": "application/json"},
+        body: jsonEncode({"email": email, "otp": otp, "password": password}),
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        return ResponseModel<bool>(
+          message: "Success Reset Password, Please log in again",
+          data: true,
+        );
+      } else {
+        throw Exception("Change Password Failed: ${response.statusCode} \n\n${response.body}");
+      }
+    } on SocketException catch (e) {
+      throw Exception("Error Change Password Failed:  $e");
+    }
+  }
 }
