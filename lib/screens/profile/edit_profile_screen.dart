@@ -39,6 +39,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   String? selectedTraining;
 
   Future<void> update() async {
+    if (!mounted) return;
     setState(() {
       _isLoading = true;
     });
@@ -53,6 +54,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         AppToast.showSuccessToast(fToast, "Update Profile Success");
         await ref.read(userProvider.notifier).getUserProfile(fToast: fToast);
         Navigator.pop(context);
+            if (!mounted) return;
         setState(() {
           _isLoading = false;
         });
@@ -63,6 +65,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       AppToast.showSuccessToast(fToast, "Update Profile Success");
       await ref.read(userProvider.notifier).getUserProfile(fToast: fToast);
       Navigator.pop(context);
+          if (!mounted) return;
       setState(() {
         _isLoading = false;
       });

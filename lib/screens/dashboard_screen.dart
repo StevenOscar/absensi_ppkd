@@ -25,36 +25,43 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   late String _timeString;
   bool isLoadingToday = false;
   bool isLoadingHistory = false;
+  Timer? _currentTimeTimer;
 
   @override
   void initState() {
     fToast.init(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await loadToday();
-      await loadHistory();
-    });
+    loadToday();
+    loadHistory();
     _timeString = DateFormat("HH:mm:ss").format(DateTime.now()).replaceAll(":", " : ");
-    Timer.periodic(Duration(seconds: 1), (Timer t) => _getCurrentTime());
+    _currentTimeTimer = Timer.periodic(Duration(seconds: 1), (Timer t) => _getCurrentTime());
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _currentTimeTimer?.cancel();
+    super.dispose();
+  }
+
   Future<void> loadHistory() async {
+    if (!mounted) return;
     setState(() {
       isLoadingHistory = true;
     });
     await ref.read(attendanceProvider.notifier).fetchAttendanceHistory(fToast: fToast);
-
+    if (!mounted) return;
     setState(() {
       isLoadingHistory = false;
     });
   }
 
   Future<void> loadToday() async {
+    if (!mounted) return;
     setState(() {
       isLoadingToday = true;
     });
     await ref.read(attendanceProvider.notifier).fetchTodayAttendance(fToast: fToast);
-
+    if (!mounted) return;
     setState(() {
       isLoadingToday = false;
     });
@@ -129,7 +136,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                   color: AppColors.mainGrey.withValues(alpha: 0.9),
                                   child: Center(
                                     child: Icon(
-                                      Icons.camera_alt_outlined,
+                                      Icons.no_photography_outlined,
                                       size: 70,
                                       color: AppColors.mainWhite,
                                     ),
@@ -240,7 +247,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         ),
                         SizedBox(height: 4),
                         isLoadingToday
-                            ? Center(child: CircularProgressIndicator(color: AppColors.mainWhite))
+                            ? Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: CircularProgressIndicator(color: AppColors.mainWhite),
+                              ),
+                            )
                             : _buildCheckInOutCard(
                               checkInTime: attendanceState.todayAttendance?.checkInTime,
                               checkOutTime: attendanceState.todayAttendance?.checkOutTime,
@@ -284,7 +296,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   ),
                   SizedBox(height: 4),
                   isLoadingHistory
-                      ? Center(child: CircularProgressIndicator())
+                      ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: CircularProgressIndicator(color: AppColors.mainGrey),
+                        ),
+                      )
                       : (attendanceState.fullAttendanceList == null ||
                           attendanceState.fullAttendanceList!.isEmpty)
                       ? Center(

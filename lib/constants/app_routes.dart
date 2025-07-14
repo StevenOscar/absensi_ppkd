@@ -3,6 +3,7 @@ import 'package:absensi_ppkd/screens/auth/register_screen.dart';
 import 'package:absensi_ppkd/screens/check_in_out/check_in_out_screen.dart';
 import 'package:absensi_ppkd/screens/dashboard_screen.dart';
 import 'package:absensi_ppkd/screens/main_screen.dart';
+import 'package:absensi_ppkd/screens/profile/change_password_screen.dart';
 import 'package:absensi_ppkd/screens/profile/edit_profile_screen.dart';
 import 'package:absensi_ppkd/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,5 +17,6 @@ class AppRoutes {
     CheckInOutScreen.id: (context) => CheckInOutScreen(),
     RegisterScreen.id: (context) => RegisterScreen(),
     EditProfileScreen.id: (context) => EditProfileScreen(),
+    ChangePasswordScreen.id: (context) => ChangePasswordScreen(),
   };
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:absensi_ppkd/constants/endpoint.dart';
 import 'package:absensi_ppkd/helper/shared_pref_helper.dart';
@@ -15,20 +16,10 @@ class AbsenApi {
     required double checkInLng,
     required String address,
   }) async {
-    print('''
-Check-in from api:
-attendanceDate: $attendanceDate (${attendanceDate.runtimeType})
-checkInTime: $checkInTime (${checkInTime.runtimeType})
-checkInLat: $checkInLat (${checkInLat.runtimeType})
-checkInLng: $checkInLng (${checkInLng.runtimeType})
-address: $address (${address.runtimeType})
-''');
-
     final token = await SharedPrefHelper.getToken();
     if (token.isEmpty) {
       throw "Token not found, Please Re-login";
     }
-    print(token);
     final response = await http.post(
       Uri.parse(Endpoint.absenCheckIn),
       headers: {
@@ -45,7 +36,6 @@ address: $address (${address.runtimeType})
         "status": "masuk",
       }),
     );
-    print(response.body);
     if (response.statusCode == 200) {
       return ResponseModel.fromJson(
         json: jsonDecode(response.body),
@@ -65,55 +55,61 @@ address: $address (${address.runtimeType})
     required double checkOutLng,
     required String address,
   }) async {
-    final token = await SharedPrefHelper.getToken();
-    if (token.isEmpty) {
-      throw "Token not found, Please Re-login";
-    }
-    final response = await http.post(
-      Uri.parse(Endpoint.absenCheckOut),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode({
-        "attendance_date": attendanceDate,
-        "check_out": checkOutTime,
-        "check_out_lat": checkOutLat.toString(),
-        "check_out_lng": checkOutLng.toString(),
-        "check_out_location": "$checkOutLat, $checkOutLng",
-        "check_out_address": address,
-      }),
-    );
-    print(response.body);
-    if (response.statusCode == 200) {
-      return ResponseModel.fromJson(
-        json: jsonDecode(response.body),
-        fromJsonT: (x) => AttendanceModel.fromJson(x),
+    try {
+      final token = await SharedPrefHelper.getToken();
+      if (token.isEmpty) {
+        throw "Token not found, Please Re-login";
+      }
+      final response = await http.post(
+        Uri.parse(Endpoint.absenCheckOut),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode({
+          "attendance_date": attendanceDate,
+          "check_out": checkOutTime,
+          "check_out_lat": checkOutLat.toString(),
+          "check_out_lng": checkOutLng.toString(),
+          "check_out_location": "$checkOutLat, $checkOutLng",
+          "check_out_address": address,
+        }),
       );
-    } else if (response.statusCode == 409 || response.statusCode == 404) {
-      return ResponseModel.fromJson(json: jsonDecode(response.body));
-    } else {
-      throw Exception("Error Check Out:  ${response.statusCode}");
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(
+          json: jsonDecode(response.body),
+          fromJsonT: (x) => AttendanceModel.fromJson(x),
+        );
+      } else if (response.statusCode == 409 || response.statusCode == 404) {
+        return ResponseModel.fromJson(json: jsonDecode(response.body));
+      } else {
+        throw Exception("Error Check Out:  ${response.statusCode}");
+      }
+    } on SocketException catch (e) {
+      throw Exception("Error Check Out:  $e");
     }
   }
 
   static Future<ResponseModel<bool>> deleteAttendance({required int id}) async {
-    final token = await SharedPrefHelper.getToken();
-    if (token.isEmpty) {
-      throw "Token not found, Please Re-login";
-    }
-    final response = await http.delete(
-      Uri.parse("${Endpoint.absen}/$id"),
-      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
-    );
-    print(response.body);
-    if (response.statusCode == 200) {
-      return ResponseModel<bool>(message: jsonDecode(response.body), data: true);
-    } else if (response.statusCode == 404) {
-      return ResponseModel.fromJson(json: jsonDecode(response.body));
-    } else {
-      throw Exception("Error Delete Attendance:  ${response.statusCode}");
+    try {
+      final token = await SharedPrefHelper.getToken();
+      if (token.isEmpty) {
+        throw "Token not found, Please Re-login";
+      }
+      final response = await http.delete(
+        Uri.parse("${Endpoint.absen}/$id"),
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+      );
+      if (response.statusCode == 200) {
+        return ResponseModel<bool>(message: jsonDecode(response.body), data: true);
+      } else if (response.statusCode == 404) {
+        return ResponseModel.fromJson(json: jsonDecode(response.body));
+      } else {
+        throw Exception("Error Delete Attendance:  ${response.statusCode}");
+      }
+    } on SocketException catch (e) {
+      throw Exception("Error Delete Attendance:  $e");
     }
   }
 
@@ -121,51 +117,57 @@ address: $address (${address.runtimeType})
     required String date,
     required String reason,
   }) async {
-    final token = await SharedPrefHelper.getToken();
-    if (token.isEmpty) {
-      throw "Token not found, Please Re-login";
-    }
-    final response = await http.post(
-      Uri.parse(Endpoint.izin),
-      headers: {
-        "Accept": "application/json",
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode({"date": date, "alasan_izin": reason}),
-    );
-    print(response.body);
-    if (response.statusCode == 200) {
-      return ResponseModel.fromJson(
-        json: jsonDecode(response.body),
-        fromJsonT: (x) => AttendanceModel.fromJson(x),
+    try {
+      final token = await SharedPrefHelper.getToken();
+      if (token.isEmpty) {
+        throw "Token not found, Please Re-login";
+      }
+      final response = await http.post(
+        Uri.parse(Endpoint.izin),
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"date": date, "alasan_izin": reason}),
       );
-    } else if (response.statusCode == 409) {
-      return ResponseModel.fromJson(json: jsonDecode(response.body));
-    } else {
-      throw Exception("Error Izin:  ${response.statusCode}");
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(
+          json: jsonDecode(response.body),
+          fromJsonT: (x) => AttendanceModel.fromJson(x),
+        );
+      } else if (response.statusCode == 409) {
+        return ResponseModel.fromJson(json: jsonDecode(response.body));
+      } else {
+        throw Exception("Error Izin:  ${response.statusCode}");
+      }
+    } on SocketException catch (e) {
+      throw Exception("Error Izin:  $e");
     }
   }
 
   static Future<ResponseModel<AttendanceModel>> getTodayAttendance({required String date}) async {
-    final token = await SharedPrefHelper.getToken();
-    if (token.isEmpty) {
-      throw "Token not found, Please Re-login";
-    }
-    final response = await http.get(
-      Uri.parse(Endpoint.absenToday).replace(queryParameters: {'attendance_date': date}),
-      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
-    );
-    print(response.body);
-    if (response.statusCode == 200) {
-      return ResponseModel.fromJson(
-        json: jsonDecode(response.body),
-        fromJsonT: (x) => AttendanceModel.fromJson(x),
+    try {
+      final token = await SharedPrefHelper.getToken();
+      if (token.isEmpty) {
+        throw "Token not found, Please Re-login";
+      }
+      final response = await http.get(
+        Uri.parse(Endpoint.absenToday).replace(queryParameters: {'attendance_date': date}),
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
       );
-    } else if (response.statusCode == 404) {
-      return ResponseModel.fromJson(json: jsonDecode(response.body));
-    } else {
-      throw Exception("Error Get Today:  ${response.statusCode}");
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(
+          json: jsonDecode(response.body),
+          fromJsonT: (x) => AttendanceModel.fromJson(x),
+        );
+      } else if (response.statusCode == 404) {
+        return ResponseModel.fromJson(json: jsonDecode(response.body));
+      } else {
+        throw Exception("Error Get Today:  ${response.statusCode}");
+      }
+    } on SocketException catch (e) {
+      throw Exception("Error Get Today:  $e");
     }
   }
 
@@ -173,51 +175,57 @@ address: $address (${address.runtimeType})
     String? startDate,
     String? endDate,
   }) async {
-    final token = await SharedPrefHelper.getToken();
-    if (token.isEmpty) {
-      throw "Token not found, Please Re-login";
-    }
-    final response = await http.get(
-      Uri.parse(Endpoint.absenHistory).replace(
-        queryParameters: {
-          if (startDate != null) 'start': startDate,
-          if (endDate != null) 'end': endDate,
-        },
-      ),
-      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
-    );
-    print(response.body);
-    if (response.statusCode == 200) {
-      return ResponseModel.listFromJson<AttendanceModel>(
-        json: jsonDecode(response.body),
-        fromJsonT: (x) => AttendanceModel.fromJson(x),
+    try {
+      final token = await SharedPrefHelper.getToken();
+      if (token.isEmpty) {
+        throw "Token not found, Please Re-login";
+      }
+      final response = await http.get(
+        Uri.parse(Endpoint.absenHistory).replace(
+          queryParameters: {
+            if (startDate != null) 'start': startDate,
+            if (endDate != null) 'end': endDate,
+          },
+        ),
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
       );
-    } else if (response.statusCode == 404) {
-      return ResponseModel.fromJson(json: jsonDecode(response.body));
-    } else {
-      throw Exception("Error Attendance History:  ${response.statusCode}");
+      if (response.statusCode == 200) {
+        return ResponseModel.listFromJson<AttendanceModel>(
+          json: jsonDecode(response.body),
+          fromJsonT: (x) => AttendanceModel.fromJson(x),
+        );
+      } else if (response.statusCode == 404) {
+        return ResponseModel.fromJson(json: jsonDecode(response.body));
+      } else {
+        throw Exception("Error Attendance History:  ${response.statusCode}");
+      }
+    } on SocketException catch (e) {
+      throw Exception("Error Attendance History:  $e");
     }
   }
 
   static Future<ResponseModel<AttendanceStatsModel>> getAttendanceStats() async {
-    final token = await SharedPrefHelper.getToken();
-    if (token.isEmpty) {
-      throw "Token not found, Please Re-login";
-    }
-    final response = await http.get(
-      Uri.parse(Endpoint.absenStats),
-      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
-    );
-    print(response.body);
-    if (response.statusCode == 200) {
-      return ResponseModel.fromJson(
-        json: jsonDecode(response.body),
-        fromJsonT: (x) => AttendanceStatsModel.fromJson(x),
+    try {
+      final token = await SharedPrefHelper.getToken();
+      if (token.isEmpty) {
+        throw "Token not found, Please Re-login";
+      }
+      final response = await http.get(
+        Uri.parse(Endpoint.absenStats),
+        headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
       );
-    } else if (response.statusCode == 404) {
-      return ResponseModel.fromJson(json: jsonDecode(response.body));
-    } else {
-      throw Exception("Error Attendance Stats:  ${response.statusCode}");
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(
+          json: jsonDecode(response.body),
+          fromJsonT: (x) => AttendanceStatsModel.fromJson(x),
+        );
+      } else if (response.statusCode == 404) {
+        return ResponseModel.fromJson(json: jsonDecode(response.body));
+      } else {
+        throw Exception("Error Attendance Stats:  ${response.statusCode}");
+      }
+    } on SocketException catch (e) {
+      throw Exception("Error Attendance Stats:  $e");
     }
   }
 }

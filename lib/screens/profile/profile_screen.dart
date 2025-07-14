@@ -1,8 +1,10 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/screens/auth/login_screen.dart';
+import 'package:absensi_ppkd/screens/profile/change_password_screen.dart';
 import 'package:absensi_ppkd/screens/profile/edit_profile_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,22 +46,41 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             padding: EdgeInsets.only(top: 80, bottom: 40),
             child: Column(
               children: [
-                CircleAvatar(
-                  radius: 70,
-                  backgroundColor:
-                      userState.user!.profilePhoto == null
-                          ? AppColors.mainGrey.withValues(alpha:0.9)
-                          : Colors.transparent,
-                  backgroundImage:
-                      userState.user!.profilePhoto != null
-                          ? NetworkImage(
-                            "https://appabsensi.mobileprojp.com/public/${userState.user!.profilePhoto!}",
-                          )
-                          : null,
-                  child:
-                      userState.user!.profilePhoto == null
-                          ? Icon(Icons.camera_alt_outlined, size: 70, color: AppColors.mainWhite)
-                          : null,
+                SizedBox(
+                  width: 150,
+                  height: 150,
+                  child: ClipOval(
+                    child:
+                        userState.user!.profilePhoto == null
+                            ? Icon(
+                              Icons.no_photography_outlined,
+                              size: 70,
+                              color: AppColors.mainWhite,
+                            )
+                            : CachedNetworkImage(
+                              imageUrl:
+                                  "https://appabsensi.mobileprojp.com/public/${userState.user!.profilePhoto!}",
+                              fit: BoxFit.cover,
+                              placeholder:
+                                  (context, url) => Container(
+                                    color: AppColors.mainGrey.withValues(alpha: 0.3),
+                                    child: Center(
+                                      child: CircularProgressIndicator(color: AppColors.mainWhite),
+                                    ),
+                                  ),
+                              errorWidget:
+                                  (context, url, error) => Container(
+                                    color: AppColors.mainGrey.withValues(alpha: 0.3),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.no_photography_outlined,
+                                        size: 70,
+                                        color: AppColors.mainWhite,
+                                      ),
+                                    ),
+                                  ),
+                            ),
+                  ),
                 ),
                 SizedBox(height: 12),
                 Padding(
@@ -92,7 +113,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Column(
               children: [
                 buildListTile(
@@ -118,7 +139,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.pushNamed(context, EditProfileScreen.id);
+                    Navigator.pushNamed(context, ChangePasswordScreen.id);
                   },
                 ),
                 buildListTile(

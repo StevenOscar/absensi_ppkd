@@ -30,6 +30,7 @@ class _LeavePermissionScreenState extends ConsumerState<LeavePermissionScreen> {
   }
 
   Future<void> leavePermission() async {
+    if (!mounted) return;
     setState(() {
       isLoadingAttendance = true;
     });
@@ -48,6 +49,7 @@ class _LeavePermissionScreenState extends ConsumerState<LeavePermissionScreen> {
     await ref.read(attendanceProvider.notifier).fetchAttendanceHistory(fToast: fToast);
     await ref.read(attendanceProvider.notifier).fetchAttendanceStats(fToast: fToast);
 
+    if (!mounted) return;
     setState(() {
       isLoadingAttendance = false;
     });
@@ -85,15 +87,15 @@ class _LeavePermissionScreenState extends ConsumerState<LeavePermissionScreen> {
                 maxDate: DateTime.now().add(const Duration(days: 14)),
                 enabledCellsDecoration: BoxDecoration(
                   color: AppColors.mainLightBlue.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(25),
                 ),
                 selectedCellDecoration: BoxDecoration(
                   color: AppColors.mainLightBlue,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(25),
                 ),
                 currentDateDecoration: BoxDecoration(
                   color: AppColors.mainLightBlue.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(25),
                 ),
                 currentDateTextStyle: AppTextStyles.body1(
                   fontWeight: FontWeight.w700,

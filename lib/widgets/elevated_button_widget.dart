@@ -10,13 +10,16 @@ class ElevatedButtonWidget extends StatelessWidget {
   final double? radius;
   final double? elevation;
   final double? verticalPadding;
+  final double? horizontalPadding;
   const ElevatedButtonWidget({
     super.key,
     required this.text,
     this.onPressed,
     this.backgroundColor,
     this.radius,
-    this.verticalPadding, this.elevation,
+    this.verticalPadding,
+    this.elevation,
+    this.horizontalPadding,
   });
 
   @override
@@ -27,7 +30,10 @@ class ElevatedButtonWidget extends StatelessWidget {
         elevation: elevation ?? 0,
         backgroundColor: backgroundColor ?? AppColors.mainLightBlue,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius ?? 25)),
-        padding: EdgeInsets.symmetric(vertical: verticalPadding ?? 12),
+        padding: EdgeInsets.symmetric(
+          vertical: verticalPadding ?? 12,
+          horizontal: horizontalPadding ?? 0,
+        ),
       ),
       child: Text(
         text,

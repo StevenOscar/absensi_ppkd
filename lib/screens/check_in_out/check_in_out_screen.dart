@@ -27,19 +27,18 @@ class _CheckInOutScreenState extends ConsumerState<CheckInOutScreen> {
   @override
   void initState() {
     fToast.init(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await loadToday();
-    });
+    loadToday();
     super.initState();
   }
 
   Future<void> loadToday() async {
+    if (!mounted) return;
     setState(() {
       isLoadingToday = true;
     });
 
     await ref.read(attendanceProvider.notifier).fetchTodayAttendance(fToast: fToast);
-
+    if (!mounted) return;
     setState(() {
       isLoadingToday = false;
     });
@@ -216,14 +215,24 @@ class _CheckInOutScreenState extends ConsumerState<CheckInOutScreen> {
                     ),
                     SizedBox(height: 20),
                     isLoadingToday
-                        ? Center(child: CircularProgressIndicator())
+                        ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: CircularProgressIndicator(color: AppColors.mainGrey),
+                          ),
+                        )
                         : AttendanceCardWidget(data: attendanceState.todayAttendance!),
                     SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child:
                           isLoadingAttendance
-                              ? Center(child: CircularProgressIndicator())
+                              ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: CircularProgressIndicator(color: AppColors.mainGrey),
+                                ),
+                              )
                               : ElevatedButtonWidget(
                                 onPressed:
                                     (locationState.distanceInMeter ?? 100) < 100 &&

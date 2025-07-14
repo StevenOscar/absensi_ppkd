@@ -344,7 +344,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               future: batchFuture,
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return Center(child: CircularProgressIndicator());
+                                  return Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: CircularProgressIndicator(color: AppColors.mainGrey),
+                                    ),
+                                  );
                                 } else if (snapshot.hasError) {
                                   return Center(child: Text("Error: ${snapshot.error}"));
                                 } else if (snapshot.hasData && snapshot.data!.data != null) {
@@ -399,7 +404,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               future: trainingFuture,
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return Center(child: CircularProgressIndicator());
+                                  return Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: CircularProgressIndicator(color: AppColors.mainGrey),
+                                    ),
+                                  );
                                 } else if (snapshot.hasError) {
                                   return Center(child: Text("Error: ${snapshot.error}"));
                                 } else if (snapshot.hasData && snapshot.data!.data != null) {

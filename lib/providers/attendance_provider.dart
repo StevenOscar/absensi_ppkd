@@ -241,7 +241,7 @@ class AttendanceProvider extends Notifier<AttendanceState> {
               }
             } else {
               isStatus = t.status!.contains(status);
-              if (t.checkOutTime == null) {
+              if (t.checkOutTime == null && t.status == "masuk") {
                 isStatus = false;
               }
             }
