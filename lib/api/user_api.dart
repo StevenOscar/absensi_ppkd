@@ -138,7 +138,7 @@ class UserApi {
         body: jsonEncode({"profile_photo": imageBase64}),
       );
       if (response.statusCode == 200) {
-        return ResponseModel<bool>(message: "Success", data: true);
+        return ResponseModel<bool>(message: "Success Edit Profile Picture", data: true);
       } else {
         throw Exception("Edit Profile Picture Failed: ${response.statusCode}");
       }
@@ -156,9 +156,9 @@ class UserApi {
       );
       print(response.body);
       if (response.statusCode == 200) {
-        return ResponseModel<bool>(message: "Success", data: true);
+        return ResponseModel<bool>(message: "Success Request OTP", data: true);
       } else {
-        throw Exception("Request OTP Failed: ${response.statusCode}");
+        throw Exception("Request OTP Failed: ${response.statusCode}\n\n${response.body}");
       }
     } on SocketException catch (e) {
       throw Exception("Error Request OTP Failed:  $e");

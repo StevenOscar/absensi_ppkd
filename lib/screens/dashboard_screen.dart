@@ -9,7 +9,6 @@ import 'package:absensi_ppkd/widgets/attendance_card_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -21,15 +20,14 @@ class DashboardScreen extends ConsumerStatefulWidget {
 }
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
-  late final FToast fToast = FToast();
   late String _timeString;
+  String greetings = "Hello!";
   bool isLoadingToday = false;
   bool isLoadingHistory = false;
   Timer? _currentTimeTimer;
 
   @override
   void initState() {
-    fToast.init(context);
     loadToday();
     loadHistory();
     _timeString = DateFormat("HH:mm:ss").format(DateTime.now()).replaceAll(":", " : ");
@@ -48,7 +46,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     setState(() {
       isLoadingHistory = true;
     });
-    await ref.read(attendanceProvider.notifier).fetchAttendanceHistory(fToast: fToast);
+    await ref.read(attendanceProvider.notifier).fetchAttendanceHistory(context: context);
     if (!mounted) return;
     setState(() {
       isLoadingHistory = false;
@@ -60,7 +58,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     setState(() {
       isLoadingToday = true;
     });
-    await ref.read(attendanceProvider.notifier).fetchTodayAttendance(fToast: fToast);
+    await ref.read(attendanceProvider.notifier).fetchTodayAttendance(context: context);
     if (!mounted) return;
     setState(() {
       isLoadingToday = false;
@@ -72,7 +70,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
     setState(() {
       _timeString = DateFormat("HH:mm:ss").format(DateTime.now()).replaceAll(":", " : ");
+      greetings = _getGreetingForHour(DateTime.now().hour);
     });
+  }
+
+  String _getGreetingForHour(int hour) {
+    if (hour >= 5 && hour < 11) {
+      return "Good Morning";
+    } else if (hour >= 11 && hour < 15) {
+      return "Good Afternoon";
+    } else if (hour >= 15 && hour < 18) {
+      return "Good Evening";
+    } else {
+      return "Good Night";
+    }
   }
 
   @override
@@ -122,10 +133,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                       ),
                                   errorWidget:
                                       (context, url, error) => Container(
-                                        color: AppColors.mainGrey.withValues(alpha: 0.3),
+                                        color: AppColors.mainRed.withValues(alpha: 0.3),
                                         child: Center(
                                           child: Icon(
-                                            Icons.no_photography_outlined,
+                                            Icons.broken_image_outlined,
                                             size: 70,
                                             color: AppColors.mainWhite,
                                           ),
@@ -133,7 +144,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                       ),
                                 )
                                 : Container(
-                                  color: AppColors.mainGrey.withValues(alpha: 0.9),
+                                  color: AppColors.mainLightBlue.withValues(alpha: 0.9),
                                   child: Center(
                                     child: Icon(
                                       Icons.no_photography_outlined,
@@ -146,7 +157,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      "MORNING",
+                      greetings,
                       style: AppTextStyles.heading4(
                         fontWeight: FontWeight.w800,
                         letterSpacing: 2,
@@ -160,7 +171,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         userState.user!.name,
                         style: AppTextStyles.body1(
                           fontWeight: FontWeight.w500,
-                          color: AppColors.mainWhite,
+                          color: AppColors.mainWhite.withValues(alpha: 0.9),
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -173,7 +184,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         userState.user!.training!.title,
                         style: AppTextStyles.body2(
                           fontWeight: FontWeight.w500,
-                          color: AppColors.mainWhite,
+                          color: AppColors.mainWhite.withValues(alpha: 0.9),
                         ),
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,

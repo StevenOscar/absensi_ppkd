@@ -9,6 +9,10 @@ class DatetimeFormatter {
     return DateFormat("EEEE, dd MMMM yyyy").format(date);
   }
 
+  static String formatDateMonthYear(DateTime date) {
+    return DateFormat("d MMMM yyyy").format(date);
+  }
+
   static String formatDay(DateTime date) {
     return DateFormat("EEEE").format(date);
   }

@@ -15,7 +15,6 @@ import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:absensi_ppkd/widgets/text_form_field_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -42,7 +41,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? usernameError;
   String? emailError;
   String? passwordError;
-  final FToast fToast = FToast();
   bool _isLoading = false;
   final ImagePicker picker = ImagePicker();
   String genderValue = "L";
@@ -52,7 +50,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void initState() {
-    fToast.init(context);
     super.initState();
     batchFuture = TrainingApi.getAllBatches();
     trainingFuture = TrainingApi.getAllTraining();
@@ -93,18 +90,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
         batchId: batchId,
         trainingId: trainingId,
       );
+      if (!mounted) return;
       if (res.errors != null) {
         final errorList = res.errors!.toList();
-        AppToast.showErrorListToast(fToast, errorList);
+        AppToast.showErrorListToast(context, errorList);
       } else if (res.data != null) {
-        AppToast.showSuccessToast(fToast, res.message);
+        AppToast.showSuccessToast(context, res.message);
+        if (!mounted) return;
         Navigator.pushNamedAndRemoveUntil(context, LoginScreen.id, (route) => false);
       } else {
-        AppToast.showErrorToast(fToast, res.message);
+        if (!mounted) return;
+        AppToast.showErrorToast(context, res.message);
       }
     } catch (e) {
-      AppToast.showErrorToast(fToast, e.toString());
+      if (!mounted) return;
+      AppToast.showErrorToast(context, e.toString());
     } finally {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -291,51 +293,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                             SizedBox(height: 16),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 12),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: RadioListTile(
-                                      fillColor: WidgetStatePropertyAll(AppColors.mainBlack),
-                                      groupValue: genderValue,
-                                      value: "L",
-                                      title: Text(
-                                        "Male",
-                                        style: AppTextStyles.body2(
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColors.mainBlack,
-                                        ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: RadioListTile(
+                                    fillColor: WidgetStatePropertyAll(AppColors.mainBlack),
+                                    groupValue: genderValue,
+                                    value: "L",
+                                    title: Text(
+                                      "Male",
+                                      style: AppTextStyles.body2(
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.mainBlack,
                                       ),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          genderValue = value!;
-                                        });
-                                      },
                                     ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        genderValue = value!;
+                                      });
+                                    },
                                   ),
-                                  Expanded(
-                                    child: RadioListTile(
-                                      fillColor: WidgetStatePropertyAll(AppColors.mainBlack),
-                                      groupValue: genderValue,
-                                      value: "P",
-                                      title: Text(
-                                        "Female",
-                                        style: AppTextStyles.body2(
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColors.mainBlack,
-                                        ),
+                                ),
+                                Expanded(
+                                  child: RadioListTile(
+                                    fillColor: WidgetStatePropertyAll(AppColors.mainBlack),
+                                    groupValue: genderValue,
+                                    value: "P",
+                                    title: Text(
+                                      "Female",
+                                      style: AppTextStyles.body2(
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.mainBlack,
                                       ),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          genderValue = value!;
-                                        });
-                                      },
                                     ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        genderValue = value!;
+                                      });
+                                    },
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 8),
                             buildLabel("Batch"),
@@ -374,7 +373,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   );
                                 } else {
                                   AppToast.showErrorToast(
-                                    fToast,
+                                    context,
                                     snapshot.data?.message ?? "Error",
                                   );
                                   return SizedBox(
@@ -434,7 +433,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   );
                                 } else {
                                   AppToast.showErrorToast(
-                                    fToast,
+                                    context,
                                     snapshot.data?.message ?? "Error",
                                   );
                                   return SizedBox(

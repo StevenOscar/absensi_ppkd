@@ -8,7 +8,6 @@ import 'package:absensi_ppkd/widgets/text_form_field_widget.dart';
 import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class LeavePermissionScreen extends ConsumerStatefulWidget {
   const LeavePermissionScreen({super.key});
@@ -18,14 +17,12 @@ class LeavePermissionScreen extends ConsumerStatefulWidget {
 }
 
 class _LeavePermissionScreenState extends ConsumerState<LeavePermissionScreen> {
-  late final FToast fToast = FToast();
   DateTime? _selectedDate;
   final reasonController = TextEditingController();
   bool isLoadingAttendance = false;
 
   @override
   void initState() {
-    fToast.init(context);
     super.initState();
   }
 
@@ -37,18 +34,19 @@ class _LeavePermissionScreenState extends ConsumerState<LeavePermissionScreen> {
     final leavePermission = await ref
         .read(attendanceProvider.notifier)
         .leavePermission(
-          fToast: fToast,
+          context: context,
           date: DatetimeFormatter.formatYearMonthDay(_selectedDate!),
           reason: reasonController.text,
         );
+    if (!mounted) return;
     if (leavePermission) {
-      AppToast.showSuccessToast(fToast, "Leave Request Submitted!");
+      AppToast.showSuccessToast(context, "Leave Request Submitted!");
     }
     _selectedDate = null;
     reasonController.clear();
-    await ref.read(attendanceProvider.notifier).fetchTodayAttendance(fToast: fToast);
-    await ref.read(attendanceProvider.notifier).fetchAttendanceHistory(fToast: fToast);
-    await ref.read(attendanceProvider.notifier).fetchAttendanceStats(fToast: fToast);
+    await ref.read(attendanceProvider.notifier).fetchTodayAttendance(context: context);
+    await ref.read(attendanceProvider.notifier).fetchAttendanceHistory(context: context);
+    await ref.read(attendanceProvider.notifier).fetchAttendanceStats(context: context);
 
     if (!mounted) return;
     setState(() {
@@ -183,6 +181,7 @@ class _LeavePermissionScreenState extends ConsumerState<LeavePermissionScreen> {
                 ],
               ),
             ),
+          SizedBox(height: 100),
         ],
       ),
     );

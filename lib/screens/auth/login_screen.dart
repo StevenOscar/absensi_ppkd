@@ -15,7 +15,6 @@ import 'package:absensi_ppkd/widgets/text_form_field_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   static const String id = "/login";
@@ -32,14 +31,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool isPasswordValid = false;
   String? emailError;
   String? passwordError;
-  final FToast fToast = FToast();
   bool _isLoading = false;
   bool _obscureText = true;
   bool isFormValid = false;
 
   @override
   void initState() {
-    fToast.init(context);
     super.initState();
   }
 
@@ -65,9 +62,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         email: emailController.text,
         password: passwordController.text,
       );
+      if (!mounted) return;
       if (res.errors != null) {
         final errorList = res.errors!.toList();
-        AppToast.showErrorListToast(fToast, errorList);
+        AppToast.showErrorListToast(context, errorList);
       } else if (res.data != null) {
         await SharedPrefHelper.setToken(res.data!.token);
         await ref
@@ -85,15 +83,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 training: res.data!.user.training,
               ),
             );
-        AppToast.showSuccessToast(fToast, res.message);
+        AppToast.showSuccessToast(context, res.message);
         ref.read(navigationProvider.notifier).setPage(currentPage: 0);
+        if (!mounted) return;
         Navigator.pushNamedAndRemoveUntil(context, MainScreen.id, (route) => false);
       } else {
-        AppToast.showErrorToast(fToast, res.message);
+        AppToast.showErrorToast(context, res.message);
       }
     } catch (e) {
-      AppToast.showErrorToast(fToast, e.toString());
+      if (!mounted) return;
+      AppToast.showErrorToast(context, e.toString());
     } finally {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });

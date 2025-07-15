@@ -1,4 +1,5 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
+import 'package:absensi_ppkd/helper/shared_pref_helper.dart';
 import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/screens/auth/login_screen.dart';
 import 'package:absensi_ppkd/screens/profile/edit_profile_screen.dart';
@@ -7,7 +8,6 @@ import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -17,12 +17,10 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  final FToast fToast = FToast();
 
   @override
   void initState() {
-    fToast.init(context);
-    ref.read(userProvider.notifier).getUserProfile(fToast: fToast);
+    ref.read(userProvider.notifier).getUserProfile(context: context);
     super.initState();
   }
 
@@ -52,10 +50,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   child: ClipOval(
                     child:
                         userState.user!.profilePhoto == null
-                            ? Icon(
-                              Icons.no_photography_outlined,
-                              size: 70,
-                              color: AppColors.mainWhite,
+                            ? Container(
+                              color: AppColors.mainLightBlue.withValues(alpha: 0.9),
+                              child: Icon(
+                                Icons.no_photography_outlined,
+                                size: 70,
+                                color: AppColors.mainWhite,
+                              ),
                             )
                             : CachedNetworkImage(
                               imageUrl:
@@ -70,10 +71,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   ),
                               errorWidget:
                                   (context, url, error) => Container(
-                                    color: AppColors.mainGrey.withValues(alpha: 0.3),
+                                    color: AppColors.mainRed.withValues(alpha: 0.3),
                                     child: Center(
                                       child: Icon(
-                                        Icons.no_photography_outlined,
+                                        Icons.broken_image_outlined,
                                         size: 70,
                                         color: AppColors.mainWhite,
                                       ),
@@ -151,7 +152,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       color: AppColors.mainRed,
                     ),
                   ),
-                  onTap: () {
+                  onTap: () async {
+                    await SharedPrefHelper.deleteToken();
                     Navigator.pushNamed(context, LoginScreen.id);
                   },
                 ),

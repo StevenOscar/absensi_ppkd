@@ -6,7 +6,6 @@ import 'package:absensi_ppkd/screens/auth/login_screen.dart';
 import 'package:absensi_ppkd/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   static String id = "/";
@@ -17,10 +16,8 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
-  final fToast = FToast();
   @override
   void initState() {
-    fToast.init(context);
     super.initState();
     goToPage();
   }
@@ -31,7 +28,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       if (token.isEmpty) {
         Navigator.pushReplacementNamed(context, LoginScreen.id);
       } else {
-        await ref.read(userProvider.notifier).getUserProfile(fToast: fToast);
+        await ref.read(userProvider.notifier).getUserProfile(context: context);
         Navigator.pushReplacementNamed(context, MainScreen.id);
       }
     });

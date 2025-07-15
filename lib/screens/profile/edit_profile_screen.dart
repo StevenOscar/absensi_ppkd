@@ -10,7 +10,6 @@ import 'package:absensi_ppkd/widgets/text_form_field_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
@@ -30,7 +29,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   bool isFormValid = true;
   String? usernameError;
   String? emailError;
-  final FToast fToast = FToast();
   String genderValue = "L";
   final ImagePicker picker = ImagePicker();
   File? selectedImage;
@@ -45,16 +43,17 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     });
     final updateProfile = await ref
         .read(userProvider.notifier)
-        .updateUserProfile(fToast: fToast, username: usernameController.text);
+        .updateUserProfile(context: context, username: usernameController.text);
     if (selectedImage != null) {
       final updatePhoto = await ref
           .read(userProvider.notifier)
-          .updateUserPicture(fToast: fToast, image: selectedImage!);
+          .updateUserPicture(context: context, image: selectedImage!);
       if (updateProfile && updatePhoto) {
-        AppToast.showSuccessToast(fToast, "Update Profile Success");
-        await ref.read(userProvider.notifier).getUserProfile(fToast: fToast);
+        if (!mounted) return;
+        AppToast.showSuccessToast(context, "Update Profile Success");
+        await ref.read(userProvider.notifier).getUserProfile(context: context);
         Navigator.pop(context);
-            if (!mounted) return;
+        if (!mounted) return;
         setState(() {
           _isLoading = false;
         });
@@ -62,10 +61,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       }
     }
     if (updateProfile) {
-      AppToast.showSuccessToast(fToast, "Update Profile Success");
-      await ref.read(userProvider.notifier).getUserProfile(fToast: fToast);
+      if (!mounted) return;
+      AppToast.showSuccessToast(context, "Update Profile Success");
+      await ref.read(userProvider.notifier).getUserProfile(context: context);
       Navigator.pop(context);
-          if (!mounted) return;
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -98,7 +98,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   @override
   void initState() {
     final userState = ref.read(userProvider);
-    fToast.init(context);
     super.initState();
     usernameController.text = userState.user!.name;
     emailController.text = userState.user!.email;
@@ -266,43 +265,40 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                             prefixIcon: Icon(Icons.email_outlined, size: 24),
                           ),
                           SizedBox(height: 16),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: RadioListTile(
-                                    fillColor: WidgetStatePropertyAll(Colors.grey),
-                                    groupValue: genderValue,
-                                    value: "L",
-                                    title: Text(
-                                      "Male",
-                                      style: AppTextStyles.body2(
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.grey,
-                                      ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: RadioListTile(
+                                  fillColor: WidgetStatePropertyAll(Colors.grey),
+                                  groupValue: genderValue,
+                                  value: "L",
+                                  title: Text(
+                                    "Male",
+                                    style: AppTextStyles.body2(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey,
                                     ),
-                                    onChanged: null,
                                   ),
+                                  onChanged: null,
                                 ),
-                                Expanded(
-                                  child: RadioListTile(
-                                    fillColor: WidgetStatePropertyAll(Colors.grey),
-                                    groupValue: genderValue,
-                                    value: "P",
-                                    title: Text(
-                                      "Female",
-                                      style: AppTextStyles.body2(
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.grey,
-                                      ),
+                              ),
+                              Expanded(
+                                child: RadioListTile(
+                                  fillColor: WidgetStatePropertyAll(Colors.grey),
+                                  groupValue: genderValue,
+                                  value: "P",
+                                  title: Text(
+                                    "Female",
+                                    style: AppTextStyles.body2(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey,
                                     ),
-                                    onChanged: null,
                                   ),
+                                  onChanged: null,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           SizedBox(height: 16),
                           DropdownSearchWidget<String>(

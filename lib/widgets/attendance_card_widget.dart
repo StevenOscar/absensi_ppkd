@@ -188,33 +188,35 @@ class AttendanceCardWidget extends ConsumerWidget {
                                     : AppColors.mainGreen.shade500
                                 : AppColors.mainRed.shade500,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 4),
+                      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Status :  ",
+                            "Status: ",
                             style: AppTextStyles.body2(
                               fontWeight: FontWeight.w700,
                               color: AppColors.mainWhite,
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          Text(
-                            WordFormatter.capitalize(
-                              (data.status == "izin"
-                                  ? "Leave"
-                                  : data.checkOutTime != null
-                                  ? "Present"
-                                  : data.checkInTime != null
-                                  ? "Not Checked Out"
-                                  : "Not Checked In"),
+                          Expanded(
+                            child: Text(
+                              WordFormatter.capitalize(
+                                (data.status == "izin"
+                                    ? "Leave"
+                                    : data.checkOutTime != null
+                                    ? "Present"
+                                    : data.checkInTime != null
+                                    ? "No Check-Out"
+                                    : "No Check-In"),
+                              ),
+                              style: AppTextStyles.body2(
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.mainWhite,
+                              ),
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            style: AppTextStyles.body2(
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.mainWhite,
-                            ),
-                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),

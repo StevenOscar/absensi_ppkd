@@ -3,8 +3,8 @@ import 'package:absensi_ppkd/models/attendance_model.dart';
 import 'package:absensi_ppkd/models/attendance_stats_model.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
 import 'package:absensi_ppkd/utils/datetime_formatter.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 final attendanceProvider = NotifierProvider<AttendanceProvider, AttendanceState>(
   () => AttendanceProvider(),
@@ -43,7 +43,7 @@ class AttendanceProvider extends Notifier<AttendanceState> {
   AttendanceState build() => const AttendanceState();
 
   Future<bool> checkIn({
-    required FToast fToast,
+    required BuildContext context,
     required String attendanceDate,
     required String checkInTime,
     required String address,
@@ -60,22 +60,22 @@ class AttendanceProvider extends Notifier<AttendanceState> {
       );
       if (res.errors != null) {
         final errorList = res.errors!.toList();
-        AppToast.showErrorListToast(fToast, errorList);
+        AppToast.showErrorListToast(context, errorList);
         return false;
       } else if (res.data != null) {
         return true;
       } else {
-        AppToast.showErrorToast(fToast, res.message);
+        AppToast.showErrorToast(context, res.message);
         return false;
       }
     } catch (e) {
-      AppToast.showErrorToast(fToast, e.toString());
+      AppToast.showErrorToast(context, e.toString());
       return false;
     }
   }
 
   Future<bool> checkOut({
-    required FToast fToast,
+    required BuildContext context,
     required String attendanceDate,
     required String checkOutTime,
     required String address,
@@ -92,16 +92,16 @@ class AttendanceProvider extends Notifier<AttendanceState> {
       );
       if (res.errors != null) {
         final errorList = res.errors!.toList();
-        AppToast.showErrorListToast(fToast, errorList);
+        AppToast.showErrorListToast(context, errorList);
         return false;
       } else if (res.data != null) {
         return true;
       } else {
-        AppToast.showErrorToast(fToast, res.message);
+        AppToast.showErrorToast(context, res.message);
         return false;
       }
     } catch (e) {
-      AppToast.showErrorToast(fToast, e.toString());
+      AppToast.showErrorToast(context, e.toString());
       return false;
     }
   }
@@ -109,35 +109,35 @@ class AttendanceProvider extends Notifier<AttendanceState> {
   Future<bool> fetchAttendanceHistory({
     String? startDate,
     String? endDate,
-    required FToast fToast,
+    required BuildContext context,
   }) async {
     try {
       final res = await AbsenApi.getAttendanceHistory(startDate: startDate, endDate: endDate);
       if (res.errors != null) {
         final errorList = res.errors!.toList();
-        AppToast.showErrorListToast(fToast, errorList);
+        AppToast.showErrorListToast(context, errorList);
         return false;
       } else if (res.data != null) {
         state = state.copyWith(fullAttendanceList: res.data);
         return true;
       } else {
-        AppToast.showErrorToast(fToast, res.message);
+        AppToast.showErrorToast(context, res.message);
         return false;
       }
     } catch (e) {
-      AppToast.showErrorToast(fToast, e.toString());
+      AppToast.showErrorToast(context, e.toString());
       return false;
     }
   }
 
-  Future<bool> fetchTodayAttendance({required FToast fToast}) async {
+  Future<bool> fetchTodayAttendance({required BuildContext context}) async {
     try {
       final res = await AbsenApi.getTodayAttendance(
         date: DatetimeFormatter.formatYearMonthDay(DateTime.now()),
       );
       if (res.errors != null) {
         final errorList = res.errors!.toList();
-        AppToast.showErrorListToast(fToast, errorList);
+        AppToast.showErrorListToast(context, errorList);
         return false;
       } else if (res.data != null) {
         state = state.copyWith(todayAttendance: res.data);
@@ -160,21 +160,21 @@ class AttendanceProvider extends Notifier<AttendanceState> {
             alasanIzin: null,
           ),
         );
-        AppToast.showErrorToast(fToast, res.message.replaceFirst("tanggal tersebut", "hari ini"));
+        AppToast.showErrorToast(context, res.message.replaceFirst("tanggal tersebut", "hari ini"));
         return false;
       }
     } catch (e) {
-      AppToast.showErrorToast(fToast, e.toString());
+      AppToast.showErrorToast(context, e.toString());
       return false;
     }
   }
 
-  Future<bool> fetchAttendanceStats({required FToast fToast}) async {
+  Future<bool> fetchAttendanceStats({required BuildContext context}) async {
     try {
       final res = await AbsenApi.getAttendanceStats();
       if (res.errors != null) {
         final errorList = res.errors!.toList();
-        AppToast.showErrorListToast(fToast, errorList);
+        AppToast.showErrorListToast(context, errorList);
         return false;
       } else if (res.data != null) {
         state = state.copyWith(attendanceStats: res.data);
@@ -188,17 +188,17 @@ class AttendanceProvider extends Notifier<AttendanceState> {
             sudahAbsenHariIni: null,
           ),
         );
-        AppToast.showErrorToast(fToast, res.message.replaceFirst("tanggal tersebut", "hari ini"));
+        AppToast.showErrorToast(context, res.message.replaceFirst("tanggal tersebut", "hari ini"));
         return false;
       }
     } catch (e) {
-      AppToast.showErrorToast(fToast, e.toString());
+      AppToast.showErrorToast(context, e.toString());
       return false;
     }
   }
 
   Future<bool> leavePermission({
-    required FToast fToast,
+    required BuildContext context,
     required String date,
     required String reason,
   }) async {
@@ -206,16 +206,16 @@ class AttendanceProvider extends Notifier<AttendanceState> {
       final res = await AbsenApi.postLeavePermission(date: date, reason: reason);
       if (res.errors != null) {
         final errorList = res.errors!.toList();
-        AppToast.showErrorListToast(fToast, errorList);
+        AppToast.showErrorListToast(context, errorList);
         return false;
       } else if (res.data != null) {
         return true;
       } else {
-        AppToast.showErrorToast(fToast, res.message);
+        AppToast.showErrorToast(context, res.message);
         return false;
       }
     } catch (e) {
-      AppToast.showErrorToast(fToast, e.toString());
+      AppToast.showErrorToast(context, e.toString());
       return false;
     }
   }

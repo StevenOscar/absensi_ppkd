@@ -8,7 +8,6 @@ import 'package:absensi_ppkd/widgets/attendance_card_widget.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CheckInOutScreen extends ConsumerStatefulWidget {
@@ -20,13 +19,11 @@ class CheckInOutScreen extends ConsumerStatefulWidget {
 }
 
 class _CheckInOutScreenState extends ConsumerState<CheckInOutScreen> {
-  final FToast fToast = FToast();
   bool isLoadingToday = false;
   bool isLoadingAttendance = false;
 
   @override
   void initState() {
-    fToast.init(context);
     loadToday();
     super.initState();
   }
@@ -37,7 +34,7 @@ class _CheckInOutScreenState extends ConsumerState<CheckInOutScreen> {
       isLoadingToday = true;
     });
 
-    await ref.read(attendanceProvider.notifier).fetchTodayAttendance(fToast: fToast);
+    await ref.read(attendanceProvider.notifier).fetchTodayAttendance(context: context);
     if (!mounted) return;
     setState(() {
       isLoadingToday = false;
@@ -53,35 +50,36 @@ class _CheckInOutScreenState extends ConsumerState<CheckInOutScreen> {
       final checkIn = await ref
           .read(attendanceProvider.notifier)
           .checkIn(
-            fToast: fToast,
+          context: context,
             address: locationState.currentAddress,
             attendanceDate: DatetimeFormatter.formatYearMonthDay(DateTime.now()),
             checkInTime: DatetimeFormatter.formatHourMinute(DateTime.now()),
             checkInLat: locationState.currentPosition!.latitude,
             checkInLng: locationState.currentPosition!.longitude,
           );
+      if (!mounted) return;
       if (checkIn) {
-        AppToast.showSuccessToast(fToast, "Check In Success!");
+        AppToast.showSuccessToast(context, "Check In Success!");
       }
     } else {
       final checkOut = await ref
           .read(attendanceProvider.notifier)
           .checkOut(
-            fToast: fToast,
-            address: locationState.currentAddress,
+context: context,            address: locationState.currentAddress,
             attendanceDate: DatetimeFormatter.formatYearMonthDay(DateTime.now()),
             checkOutTime: DatetimeFormatter.formatHourMinute(DateTime.now()),
             checkOutLat: locationState.currentPosition!.latitude,
             checkOutLng: locationState.currentPosition!.longitude,
           );
+      if (!mounted) return;
       if (checkOut) {
-        AppToast.showSuccessToast(fToast, "Check Out Success!");
+        AppToast.showSuccessToast(context, "Check Out Success!");
       }
     }
 
-    await ref.read(attendanceProvider.notifier).fetchTodayAttendance(fToast: fToast);
-    await ref.read(attendanceProvider.notifier).fetchAttendanceHistory(fToast: fToast);
-    await ref.read(attendanceProvider.notifier).fetchAttendanceStats(fToast: fToast);
+    await ref.read(attendanceProvider.notifier).fetchTodayAttendance(context: context);
+    await ref.read(attendanceProvider.notifier).fetchAttendanceHistory(context: context);
+    await ref.read(attendanceProvider.notifier).fetchAttendanceStats(context: context);
 
     setState(() {
       isLoadingAttendance = false;

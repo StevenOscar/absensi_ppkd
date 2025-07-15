@@ -1,6 +1,7 @@
 import 'package:absensi_ppkd/api/user_api.dart';
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/constants/assets_images.dart';
+import 'package:absensi_ppkd/helper/shared_pref_helper.dart';
 import 'package:absensi_ppkd/screens/auth/login_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
@@ -37,7 +38,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   void initState() {
     super.initState();
-    fToast.init(context);
   }
 
   @override
@@ -61,18 +61,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         password: passwordController.text,
         otp: otpValue,
       );
+      if (!mounted) return;
       if (res.errors != null) {
         final errorList = res.errors!.toList();
-        AppToast.showErrorListToast(fToast, errorList);
+        AppToast.showErrorListToast(context, errorList);
       } else if (res.data != null) {
-        AppToast.showSuccessToast(fToast, res.message);
+        AppToast.showSuccessToast(context, res.message);
+        await SharedPrefHelper.deleteToken();
+        if (!mounted) return;
         Navigator.pushNamedAndRemoveUntil(context, LoginScreen.id, (route) => false);
       } else {
-        AppToast.showErrorToast(fToast, res.message);
+        if (!mounted) return;
+        AppToast.showErrorToast(context, res.message);
       }
     } catch (e) {
-      AppToast.showErrorToast(fToast, e.toString());
+      if (!mounted) return;
+      AppToast.showErrorToast(context, e.toString());
     } finally {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });

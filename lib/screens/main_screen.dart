@@ -13,7 +13,6 @@ import 'package:absensi_ppkd/utils/app_toast.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   static const String id = "/main";
@@ -33,7 +32,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ProfileScreen(),
   ];
 
-  final FToast fToast = FToast();
   static List<IconData> iconList = [
     Icons.home,
     Icons.work_off_outlined,
@@ -44,7 +42,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   void initState() {
-    fToast.init(context);
     super.initState();
   }
 
@@ -56,7 +53,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         if (permission) {
           Navigator.pushNamed(context, CheckInOutScreen.id);
         } else {
-          AppToast.showErrorToast(fToast, "Please Enable Location Permission");
+          if (!mounted) return;
+          AppToast.showErrorToast(context, "Please Enable Location Permission");
         }
         opacity = 0;
       } else if (opacity < 1) {
