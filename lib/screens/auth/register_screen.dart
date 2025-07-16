@@ -10,6 +10,7 @@ import 'package:absensi_ppkd/models/training_model.dart';
 import 'package:absensi_ppkd/screens/auth/login_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
+import 'package:absensi_ppkd/utils/copyright_text.dart';
 import 'package:absensi_ppkd/widgets/dropdown_form_field_widget.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:absensi_ppkd/widgets/text_form_field_widget.dart';
@@ -504,6 +505,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ],
                         ),
                       ),
+                      CopyrightText.build,
                       SizedBox(height: 100),
                     ],
                   ),

@@ -18,7 +18,8 @@ class DropdownSearchWidget<T> extends StatelessWidget {
     required this.onChanged,
     this.validator,
     required this.title,
-    required this.prefixIcon, this.enabled,
+    required this.prefixIcon,
+    this.enabled,
   });
 
   @override
@@ -53,7 +54,7 @@ class DropdownSearchWidget<T> extends StatelessWidget {
         },
         title: Container(
           decoration: BoxDecoration(
-            color: AppColors.mainLightBlue,
+            color: AppColors.mainGrey,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),

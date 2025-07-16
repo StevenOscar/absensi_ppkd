@@ -4,6 +4,7 @@ import 'package:absensi_ppkd/constants/assets_images.dart';
 import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/screens/profile/change_password_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
+import 'package:absensi_ppkd/utils/copyright_text.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -86,6 +87,7 @@ class RequestOtpScreen extends ConsumerWidget {
                 }
               },
             ),
+            CopyrightText.build,
           ],
         ),
       ),

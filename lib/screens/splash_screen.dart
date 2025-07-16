@@ -4,6 +4,7 @@ import 'package:absensi_ppkd/helper/shared_pref_helper.dart';
 import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/screens/auth/login_screen.dart';
 import 'package:absensi_ppkd/screens/main_screen.dart';
+import 'package:absensi_ppkd/utils/copyright_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

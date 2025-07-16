@@ -2,6 +2,7 @@ import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/providers/attendance_provider.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
+import 'package:absensi_ppkd/utils/copyright_text.dart';
 import 'package:absensi_ppkd/utils/datetime_formatter.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:absensi_ppkd/widgets/text_form_field_widget.dart';
@@ -78,7 +79,7 @@ class _LeavePermissionScreenState extends ConsumerState<LeavePermissionScreen> {
           Center(
             child: SizedBox(
               width: double.infinity,
-              height: 400,
+              height: 320,
               child: DatePicker(
                 splashRadius: 12,
                 centerLeadingDate: true,
@@ -181,6 +182,7 @@ class _LeavePermissionScreenState extends ConsumerState<LeavePermissionScreen> {
                 ],
               ),
             ),
+          CopyrightText.build,
           SizedBox(height: 100),
         ],
       ),

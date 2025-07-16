@@ -93,7 +93,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         height: 70,
         notchMargin: 12,
         gapLocation: GapLocation.center,
-        backgroundColor: AppColors.mainLemon,
+        backgroundColor: Color(0xff272b38),
         tabBuilder: (int index, bool isActive) {
           return Padding(
             padding: const EdgeInsets.only(top: 12, bottom: 4),
@@ -102,13 +102,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 Icon(
                   iconList[index],
                   size: isActive ? 28 : 24,
-                  color: isActive ? AppColors.mainLightBlue : Colors.grey.shade700,
+                  color: isActive ? AppColors.mainLightBlue : Colors.grey.shade500,
                 ),
                 Text(
                   labelList[index],
                   style: AppTextStyles.body3(
                     fontWeight: FontWeight.w600,
-                    color: isActive ? AppColors.mainLightBlue : Colors.grey.shade700,
+                    color: isActive ? AppColors.mainLightBlue : Colors.grey.shade500,
                   ),
                 ),
               ],
@@ -135,7 +135,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             Container(
               width: 70,
               height: 70,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.mainGrey),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xff272b38)),
               child: Icon(Icons.fingerprint, color: AppColors.mainWhite, size: 48),
             ),
             AnimatedOpacity(

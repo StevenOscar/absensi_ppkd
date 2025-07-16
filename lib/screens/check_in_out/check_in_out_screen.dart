@@ -3,6 +3,7 @@ import 'package:absensi_ppkd/providers/attendance_provider.dart';
 import 'package:absensi_ppkd/providers/location_provider.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
+import 'package:absensi_ppkd/utils/copyright_text.dart';
 import 'package:absensi_ppkd/utils/datetime_formatter.dart';
 import 'package:absensi_ppkd/widgets/attendance_card_widget.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
@@ -50,7 +51,7 @@ class _CheckInOutScreenState extends ConsumerState<CheckInOutScreen> {
       final checkIn = await ref
           .read(attendanceProvider.notifier)
           .checkIn(
-          context: context,
+            context: context,
             address: locationState.currentAddress,
             attendanceDate: DatetimeFormatter.formatYearMonthDay(DateTime.now()),
             checkInTime: DatetimeFormatter.formatHourMinute(DateTime.now()),
@@ -65,7 +66,8 @@ class _CheckInOutScreenState extends ConsumerState<CheckInOutScreen> {
       final checkOut = await ref
           .read(attendanceProvider.notifier)
           .checkOut(
-context: context,            address: locationState.currentAddress,
+            context: context,
+            address: locationState.currentAddress,
             attendanceDate: DatetimeFormatter.formatYearMonthDay(DateTime.now()),
             checkOutTime: DatetimeFormatter.formatHourMinute(DateTime.now()),
             checkOutLat: locationState.currentPosition!.latitude,
@@ -257,6 +259,7 @@ context: context,            address: locationState.currentAddress,
                                         : "Already Checked In/Out Today",
                               ),
                     ),
+                                      CopyrightText.build,
                   ],
                 ),
               ),

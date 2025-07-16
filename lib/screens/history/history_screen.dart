@@ -1,6 +1,7 @@
 import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/providers/attendance_provider.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
+import 'package:absensi_ppkd/utils/copyright_text.dart';
 import 'package:absensi_ppkd/utils/datetime_formatter.dart';
 import 'package:absensi_ppkd/widgets/attendance_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -70,13 +71,17 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         ),
         toolbarHeight: 70,
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          loadStats();
+          loadHistory();
+        },
+        child: ListView(
           children: [
             isLoadingStats
                 ? Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(24),
                     child: Column(
                       children: [
                         CircularProgressIndicator(color: AppColors.mainGrey),
@@ -172,7 +177,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                         children: [
                           Text(
                             "Period",
-                            style: AppTextStyles.body3(
+                            style: AppTextStyles.body2(
                               fontWeight: FontWeight.w800,
                               color: AppColors.mainWhite,
                             ),
@@ -207,7 +212,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                         return [
                           Center(
                             child: Text(
-                              "All",
+                              "All Attendance",
                               style: AppTextStyles.body2(
                                 fontWeight: FontWeight.w800,
                                 color: AppColors.mainGrey,
@@ -369,6 +374,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                     );
                   },
                 ),
+                                CopyrightText.build,
             SizedBox(height: 40),
           ],
         ),

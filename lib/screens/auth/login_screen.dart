@@ -10,6 +10,7 @@ import 'package:absensi_ppkd/screens/main_screen.dart';
 import 'package:absensi_ppkd/screens/profile/enter_email_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
+import 'package:absensi_ppkd/utils/copyright_text.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:absensi_ppkd/widgets/text_form_field_widget.dart';
 import 'package:flutter/gestures.dart';
@@ -282,6 +283,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                             ),
                           ),
+                          CopyrightText.build,
                           SizedBox(height: 40),
                         ],
                       ),

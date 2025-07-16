@@ -5,6 +5,8 @@ import 'package:absensi_ppkd/providers/attendance_provider.dart';
 import 'package:absensi_ppkd/providers/navigation_provider.dart';
 import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
+import 'package:absensi_ppkd/utils/copyright_text.dart';
+import 'package:absensi_ppkd/utils/datetime_formatter.dart';
 import 'package:absensi_ppkd/widgets/attendance_card_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -190,7 +192,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 40),
                   ],
                 ),
               ),
@@ -241,6 +243,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     margin: EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
                       children: [
+                        Text(
+                          DatetimeFormatter.formatDayDateMonthYear(DateTime.now()),
+                          style: AppTextStyles.body2(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.mainWhite,
+                          ),
+                        ),
                         Text(
                           _timeString,
                           style: AppTextStyles.heading2(
@@ -317,13 +326,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           attendanceState.fullAttendanceList!.isEmpty)
                       ? Center(
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 40),
-                          child: Text(
-                            "No Attendance Data",
-                            style: AppTextStyles.body3(
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.mainBlack,
-                            ),
+                          padding: const EdgeInsets.only(top: 60),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.question_mark_sharp,
+                                size: 64,
+                                color: AppColors.mainGrey.withValues(alpha: 0.4),
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                "No attendance Data",
+                                style: AppTextStyles.body2(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.mainGrey.withValues(alpha: 0.4),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       )
@@ -341,7 +361,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           );
                         },
                       ),
-                  SizedBox(height: 40),
+                  CopyrightText.build,
+                  SizedBox(height: 60),
                 ],
               ),
             ],

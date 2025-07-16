@@ -84,7 +84,9 @@ class AbsenApi {
       } else if (response.statusCode == 409 || response.statusCode == 404) {
         return ResponseModel.fromJson(json: jsonDecode(response.body));
       } else {
-        throw Exception("Error Check Out:  ${response.statusCode}");
+        throw Exception(
+          "Error Check Out:  ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Check Out:  $e");
@@ -106,7 +108,9 @@ class AbsenApi {
       } else if (response.statusCode == 404) {
         return ResponseModel.fromJson(json: jsonDecode(response.body));
       } else {
-        throw Exception("Error Delete Attendance:  ${response.statusCode}");
+        throw Exception(
+          "Error Delete Attendance:  ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Delete Attendance:  $e");
@@ -139,7 +143,9 @@ class AbsenApi {
       } else if (response.statusCode == 409) {
         return ResponseModel.fromJson(json: jsonDecode(response.body));
       } else {
-        throw Exception("Error Izin:  ${response.statusCode}");
+        throw Exception(
+          "Error Izin:  ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Izin:  $e");
@@ -164,7 +170,9 @@ class AbsenApi {
       } else if (response.statusCode == 404) {
         return ResponseModel.fromJson(json: jsonDecode(response.body));
       } else {
-        throw Exception("Error Get Today:  ${response.statusCode}");
+        throw Exception(
+          "Error Get Today:  ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Get Today:  $e");
@@ -197,7 +205,9 @@ class AbsenApi {
       } else if (response.statusCode == 404) {
         return ResponseModel.fromJson(json: jsonDecode(response.body));
       } else {
-        throw Exception("Error Attendance History:  ${response.statusCode}");
+        throw Exception(
+          "Error Attendance History:  ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Attendance History:  $e");
@@ -222,7 +232,9 @@ class AbsenApi {
       } else if (response.statusCode == 404) {
         return ResponseModel.fromJson(json: jsonDecode(response.body));
       } else {
-        throw Exception("Error Attendance Stats:  ${response.statusCode}");
+        throw Exception(
+          "Error Attendance Stats:  ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Attendance Stats:  $e");

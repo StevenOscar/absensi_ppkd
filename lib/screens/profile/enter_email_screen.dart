@@ -3,6 +3,7 @@ import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/screens/profile/change_password_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
+import 'package:absensi_ppkd/utils/copyright_text.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:absensi_ppkd/widgets/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -139,6 +140,7 @@ class _EnterEmailScreenState extends State<EnterEmailScreen> {
                     text: "Send OTP",
                   ),
                 ),
+            CopyrightText.build,
           ],
         ),
       ),

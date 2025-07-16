@@ -4,6 +4,7 @@ import 'package:absensi_ppkd/constants/app_colors.dart';
 import 'package:absensi_ppkd/providers/user_provider.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
+import 'package:absensi_ppkd/utils/copyright_text.dart';
 import 'package:absensi_ppkd/widgets/dropdown_form_field_widget.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:absensi_ppkd/widgets/text_form_field_widget.dart';
@@ -218,7 +219,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 18, vertical: 28),
                       child: Column(
                         children: [
-                          buildLabel("Username"),
+                          buildLabel("Username", AppColors.mainBlack),
                           SizedBox(height: 12),
                           TextFormFieldWidget(
                             maxlines: 1,
@@ -240,7 +241,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                             prefixIcon: Icon(Icons.person_outline, size: 24),
                           ),
                           SizedBox(height: 20),
-                          buildLabel("Email"),
+                          buildLabel("Email", Colors.grey),
                           SizedBox(height: 12),
                           TextFormFieldWidget(
                             controller: emailController,
@@ -337,6 +338,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                 ),
                               ),
                           SizedBox(height: 8),
+                          CopyrightText.build,
                         ],
                       ),
                     ),
@@ -351,12 +353,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 }
 
-Padding buildLabel(String text) {
+Padding buildLabel(String text, Color color) {
   return Padding(
     padding: const EdgeInsets.only(left: 4),
-    child: Text(
-      text,
-      style: AppTextStyles.body2(fontWeight: FontWeight.w500, color: AppColors.mainBlack),
-    ),
+    child: Text(text, style: AppTextStyles.body2(fontWeight: FontWeight.w500, color: color)),
   );
 }

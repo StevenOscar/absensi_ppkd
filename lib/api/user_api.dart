@@ -34,13 +34,16 @@ class UserApi {
         headers: {"Accept": "application/json", "Content-Type": "application/json"},
         body: jsonEncode(registerMap),
       );
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return ResponseModel.fromJson(
           json: jsonDecode(response.body),
           fromJsonT: (x) => UserModel.fromJson(x),
         );
       } else {
-        throw Exception("Register Failed:  ${response.statusCode}");
+        throw Exception(
+          "Register Failed:  ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Register Failed:  $e");
@@ -64,7 +67,9 @@ class UserApi {
           fromJsonT: (x) => UserModel.fromJson(x),
         );
       } else {
-        throw Exception("Login Failed: ${response.statusCode}");
+        throw Exception(
+          "Login Failed: ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Login Failed:  $e");
@@ -87,7 +92,9 @@ class UserApi {
           fromJsonT: (x) => User.fromJson(x),
         );
       } else {
-        throw Exception("Get Profile Failed: ${response.statusCode}");
+        throw Exception(
+          "Get Profile Failed: ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Profile Failed:  $e");
@@ -115,7 +122,9 @@ class UserApi {
           fromJsonT: (x) => User.fromJson(x),
         );
       } else {
-        throw Exception("Edit Profile Data Failed: ${response.statusCode}");
+        throw Exception(
+          "Edit Profile Data Failed: ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Profile Data Failed:  $e");
@@ -140,7 +149,9 @@ class UserApi {
       if (response.statusCode == 200) {
         return ResponseModel<bool>(message: "Success Edit Profile Picture", data: true);
       } else {
-        throw Exception("Edit Profile Picture Failed: ${response.statusCode}");
+        throw Exception(
+          "Edit Profile Picture Failed: ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Profile Picture Failed:  $e");
@@ -158,7 +169,9 @@ class UserApi {
       if (response.statusCode == 200) {
         return ResponseModel<bool>(message: "Success Request OTP", data: true);
       } else {
-        throw Exception("Request OTP Failed: ${response.statusCode}\n\n${response.body}");
+        throw Exception(
+          "Request OTP Failed: ${response.statusCode}\n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Request OTP Failed:  $e");
@@ -183,7 +196,9 @@ class UserApi {
           data: true,
         );
       } else {
-        throw Exception("Change Password Failed: ${response.statusCode} \n\n${response.body}");
+        throw Exception(
+          "Change Password Failed: ${response.statusCode} \n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Change Password Failed:  $e");

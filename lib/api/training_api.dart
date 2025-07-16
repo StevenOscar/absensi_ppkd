@@ -20,7 +20,8 @@ class TrainingApi {
           fromJsonT: (x) => Batch.fromJson(x),
         );
       } else {
-        throw Exception("Error Fetch Batches: ${response.statusCode}");
+        throw Exception("Error Fetch Batches: ${response.statusCode}\n${jsonDecode(response.body)["message"]}",
+        );
       }
     } on SocketException catch (e) {
       throw Exception("Error Check Out:  $e");
@@ -39,7 +40,7 @@ class TrainingApi {
           fromJsonT: (x) => Training.fromJson(x),
         );
       } else {
-        throw Exception("Error Fetch Trainings:  ${response.statusCode}");
+        throw Exception("Error Fetch Trainings:  ${response.statusCode} \n${jsonDecode(response.body)["message"]}");
       }
     } on SocketException catch (e) {
       throw Exception("Error Check Out:  $e");

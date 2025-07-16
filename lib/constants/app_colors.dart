@@ -5,6 +5,7 @@ class AppColors {
   static const textGrey = Color(0xff636363);
   static const mainLemon = Color(0xffDFEE0A);
   static const mainYellow = Color.fromARGB(255, 245, 204, 0);
+  static const blue = Color(0xFF2196F3);
   static const mainLightBlue = Color(0xff537FE7);
   static const mainWhite = Colors.white;
   static const mainBlack = Colors.black;

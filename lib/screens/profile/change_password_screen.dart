@@ -5,6 +5,7 @@ import 'package:absensi_ppkd/helper/shared_pref_helper.dart';
 import 'package:absensi_ppkd/screens/auth/login_screen.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/app_toast.dart';
+import 'package:absensi_ppkd/utils/copyright_text.dart';
 import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:absensi_ppkd/widgets/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -173,7 +174,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       passwordError = "Password must be at least 8 characters";
                     } else if (!(RegExp(r'[A-Z]').hasMatch(value) &&
                         RegExp(r'[a-z]').hasMatch(value) &&
-                        RegExp(r'\d').hasMatch(value) &&
                         RegExp(r'[!@#\$%^&*(),.?":{}|<>]').hasMatch(value))) {
                       isPasswordValid = false;
                       passwordError = "Password must include uppercase, lowercase, and symbol";
@@ -256,6 +256,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             }
                             : null,
                   ),
+              CopyrightText.build,
             ],
           ),
         ),

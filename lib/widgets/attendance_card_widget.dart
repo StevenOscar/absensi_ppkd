@@ -3,6 +3,7 @@ import 'package:absensi_ppkd/models/attendance_model.dart';
 import 'package:absensi_ppkd/styles/app_text_styles.dart';
 import 'package:absensi_ppkd/utils/datetime_formatter.dart';
 import 'package:absensi_ppkd/utils/word_formatter.dart';
+import 'package:absensi_ppkd/widgets/elevated_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -17,35 +18,80 @@ class AttendanceCardWidget extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Center(
-            child: Text(
-              "Attendance Details",
-              style: AppTextStyles.heading3(fontWeight: FontWeight.w700, color: AppColors.mainGrey),
-            ),
-          ),
-          content: SingleChildScrollView(
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          backgroundColor: AppColors.mainWhite,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                _buildRow("Date", dateFormatter.format(attendance.attendanceDate)),
-                _buildRow("Status", attendance.status ?? "-"),
+                Icon(Icons.event_note, color: AppColors.mainLightBlue, size: 40),
+                SizedBox(height: 12),
+                Text(
+                  "Attendance Details",
+                  style: AppTextStyles.heading3(
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.mainGrey,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 18),
+                Divider(thickness: 1, color: AppColors.mainGrey.withValues(alpha: 0.2)),
+                SizedBox(height: 8),
+                _buildRowWithIcon(
+                  Icons.calendar_today,
+                  "Date",
+                  dateFormatter.format(attendance.attendanceDate),
+                ),
+                _buildRowWithIcon(Icons.info_outline, "Status", attendance.status ?? "-"),
                 if (attendance.status?.toLowerCase() == "izin" && attendance.alasanIzin != null)
-                  _buildRow("Reason", attendance.alasanIzin ?? "-"),
-                const Divider(),
-                _buildRow("Check In Time", attendance.checkInTime ?? "-- : --"),
-                _buildRow("Check In Location", attendance.checkInLocation ?? "-"),
-                _buildRow("Check In Address", attendance.checkInAddress ?? "-"),
-                const SizedBox(height: 12),
-                _buildRow("Check Out Time", attendance.checkOutTime ?? "-- : --"),
-                _buildRow("Check Out Location", attendance.checkOutLocation ?? "-"),
-                _buildRow("Check Out Address", attendance.checkOutAddress ?? "-"),
+                  _buildRowWithIcon(Icons.help_outline, "Reason", attendance.alasanIzin ?? "-"),
+                SizedBox(height: 8),
+                Divider(thickness: 1, color: AppColors.mainGrey.withValues(alpha: 0.2)),
+                SizedBox(height: 8),
+                _buildRowWithIcon(
+                  Icons.login,
+                  "Check In \nTime",
+                  attendance.checkInTime ?? "Not recorded",
+                ),
+                _buildRowWithIcon(
+                  Icons.location_on_outlined,
+                  "Check In \nLocation",
+                  attendance.checkInLocation ?? "-",
+                ),
+                _buildRowWithIcon(
+                  Icons.home_outlined,
+                  "Check In \nAddress",
+                  attendance.checkInAddress ?? "Unknown",
+                ),
+                SizedBox(height: 12),
+                _buildRowWithIcon(
+                  Icons.logout,
+                  "Check Out \nTime",
+                  attendance.checkOutTime ?? "Not recorded",
+                ),
+                _buildRowWithIcon(
+                  Icons.location_on_outlined,
+                  "Check Out \nLocation",
+                  attendance.checkOutLocation ?? "-",
+                ),
+                _buildRowWithIcon(
+                  Icons.home_outlined,
+                  "Check Out \nAddress",
+                  attendance.checkOutAddress ?? "Unknown",
+                ),
+                SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButtonWidget(
+                    text: "Close",
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
               ],
             ),
           ),
-          actions: [
-            TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Close")),
-          ],
         );
       },
     );
@@ -232,20 +278,28 @@ class AttendanceCardWidget extends ConsumerWidget {
   }
 }
 
-Widget _buildRow(String label, String value) {
+Widget _buildRowWithIcon(IconData icon, String label, String value) {
   return Padding(
-    padding: const EdgeInsets.only(bottom: 6),
+    padding: const EdgeInsets.symmetric(vertical: 4),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Icon(icon, size: 18, color: AppColors.mainGrey.withValues(alpha: 0.7)),
+        SizedBox(width: 8),
         Expanded(
           flex: 3,
           child: Text(
             "$label:",
-            style: AppTextStyles.body3(fontWeight: FontWeight.w500, color: AppColors.mainBlack),
+            style: AppTextStyles.body3(fontWeight: FontWeight.w700, color: AppColors.mainGrey),
           ),
         ),
-        Expanded(flex: 5, child: Text(value)),
+        Expanded(
+          flex: 5,
+          child: Text(
+            value,
+            style: AppTextStyles.body3(fontWeight: FontWeight.w400, color: AppColors.mainBlack),
+          ),
+        ),
       ],
     ),
   );
